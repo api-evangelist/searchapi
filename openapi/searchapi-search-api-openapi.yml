@@ -1,0 +1,396 @@
+openapi: 3.1.0
+info:
+  title: SearchApi SERP API
+  version: v1
+  description: >-
+    Real-time SERP and search-data API. A single GET endpoint, `/api/v1/search`, returns clean,
+    structured JSON results across 100+ search engines selected via the `engine` parameter (Google,
+    Google Maps, Google News, Google Scholar, Google Images, Google Shopping, Google Trends, Google
+    Jobs, YouTube, Bing, Baidu, DuckDuckGo, Yahoo, Yandex, and marketplace engines such as Amazon,
+    Walmart, and eBay). SearchApi handles proxy rotation, CAPTCHA solving, and geo/locale targeting
+    server-side. Authenticate with an API key, sent either as an `Authorization: Bearer <key>` header
+    or an `api_key` query parameter.
+
+    This description is GENERATED from the public documentation at https://www.searchapi.io/docs —
+    SearchApi does not publish a machine-readable OpenAPI/GraphQL contract. Parameters and the response
+    envelope are grounded in the documented Google and Google Maps engines; per-engine parameter sets
+    and response blocks vary. No fabrication: only documented fields are included, and engine-specific
+    fields are noted as such.
+  x-provenance:
+    generated: '2026-07-24'
+    method: generated
+    source:
+      - https://www.searchapi.io/docs/google
+      - https://www.searchapi.io/docs/google-maps
+    note: >-
+      Faithful reconstruction from public docs. `engine` is intentionally an open string (100+ engines);
+      only documented, engine-common parameters are modeled here. Verify per-engine parameters against
+      the specific engine's docs page.
+  contact:
+    name: SearchApi Support
+    email: support@searchapi.io
+    url: https://www.searchapi.io/docs
+  termsOfService: https://www.searchapi.io/legal/terms
+servers:
+  - url: https://www.searchapi.io
+    description: SearchApi production
+security:
+  - bearerAuth: []
+  - apiKeyQuery: []
+tags:
+  - name: search
+    description: Real-time SERP / search-data retrieval across supported engines.
+paths:
+  /api/v1/search:
+    get:
+      operationId: search
+      summary: Run a search against a chosen engine
+      description: >-
+        Executes a real-time search on the engine named by `engine` and returns structured JSON. The
+        set of accepted parameters and the populated response blocks depend on the selected engine; the
+        parameters below are those common to the Google web-search engine (the reference engine). See
+        the per-engine docs pages for engine-specific parameters (e.g. `ll` for `google_maps`).
+      tags:
+        - search
+      parameters:
+        - name: engine
+          in: query
+          required: true
+          description: >-
+            Search engine to query. SearchApi supports 100+ engines. Common values include `google`,
+            `google_maps`, `google_news`, `google_scholar`, `google_images`, `google_videos`,
+            `google_shopping`, `google_trends`, `google_jobs`, `google_autocomplete`, `google_lens`,
+            `google_ai_mode`, `bing`, `duckduckgo`, `yahoo`, `yandex`, `baidu`, `youtube`,
+            `amazon_search`, `walmart_search`, `ebay_search`.
+          schema:
+            type: string
+            examples:
+              - google
+        - name: q
+          in: query
+          required: true
+          description: >-
+            Search query. Supports engine search operators (e.g. `site:`, `inurl:`). For some engines
+            this parameter carries the engine's primary input (e.g. a place query for `google_maps`).
+          schema:
+            type: string
+            examples:
+              - coffee
+        - name: api_key
+          in: query
+          required: false
+          description: >-
+            API key. Optional here because authentication is normally supplied via the
+            `Authorization: Bearer <key>` header; provide it as a query parameter only if you are not
+            using the header.
+          schema:
+            type: string
+        - name: location
+          in: query
+          required: false
+          description: Geographic location from which the search is executed. Cannot be combined with `uule`.
+          schema:
+            type: string
+            examples:
+              - "Austin, Texas, United States"
+        - name: uule
+          in: query
+          required: false
+          description: Google-encoded location string. Cannot be combined with `location`.
+          schema:
+            type: string
+        - name: device
+          in: query
+          required: false
+          description: Device type to emulate.
+          schema:
+            type: string
+            enum: [desktop, mobile, tablet]
+            default: desktop
+        - name: gl
+          in: query
+          required: false
+          description: Two-letter country code for the results (e.g. `us`, `gb`).
+          schema:
+            type: string
+            default: us
+        - name: hl
+          in: query
+          required: false
+          description: Two-letter interface language code (e.g. `en`, `es`).
+          schema:
+            type: string
+            default: en
+        - name: lr
+          in: query
+          required: false
+          description: Restrict results to documents in a given language, in `lang_{code}` form (e.g. `lang_en`).
+          schema:
+            type: string
+        - name: cr
+          in: query
+          required: false
+          description: Restrict results to documents originating from a given country.
+          schema:
+            type: string
+        - name: safe
+          in: query
+          required: false
+          description: SafeSearch filtering level.
+          schema:
+            type: string
+            enum: [active, blur, off]
+            default: blur
+        - name: nfpr
+          in: query
+          required: false
+          description: Set to `1` to exclude results from auto-corrected queries.
+          schema:
+            type: integer
+            enum: [0, 1]
+        - name: filter
+          in: query
+          required: false
+          description: Set to `0` to disable the "Similar/Omitted results" duplicate filters.
+          schema:
+            type: integer
+            enum: [0, 1]
+        - name: verbatim
+          in: query
+          required: false
+          description: Force exact-keyword (verbatim) matching.
+          schema:
+            type: boolean
+        - name: kgmid
+          in: query
+          required: false
+          description: Knowledge Graph entity id (`/m/` or `/g/` form) to fetch a specific entity.
+          schema:
+            type: string
+        - name: time_period
+          in: query
+          required: false
+          description: Restrict results to a relative time window.
+          schema:
+            type: string
+            enum:
+              - last_1_minute
+              - last_5_minutes
+              - last_15_minutes
+              - last_30_minutes
+              - last_hour
+              - last_day
+              - last_week
+              - last_month
+              - last_year
+        - name: time_period_min
+          in: query
+          required: false
+          description: Custom time-window start date, `MM/DD/YYYY`.
+          schema:
+            type: string
+        - name: time_period_max
+          in: query
+          required: false
+          description: Custom time-window end date, `MM/DD/YYYY`.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: Results page number.
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: ll
+          in: query
+          required: false
+          description: >-
+            GPS coordinates for engines that accept them (notably `google_maps`), in
+            `@latitude,longitude,zoom` (e.g. `@40.7455096,-74.0083012,14z`) form.
+          schema:
+            type: string
+        - name: optimization_strategy
+          in: query
+          required: false
+          description: Request optimization approach.
+          schema:
+            type: string
+            enum: [performance, ads]
+        - name: zero_retention
+          in: query
+          required: false
+          description: Disable logging/storage of the request and response (Enterprise plans only).
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Structured search results. Populated blocks depend on the engine and query.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          description: Bad request — a required parameter is missing or a value is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too many requests — account rate/throughput limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'Send the API key as: `Authorization: Bearer <api_key>`.'
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+      description: Send the API key as the `api_key` query parameter.
+  schemas:
+    SearchResponse:
+      type: object
+      description: >-
+        Top-level search response envelope. `search_metadata`, `search_parameters`, and
+        `search_information` are engine-common; the remaining result blocks (only a representative
+        subset is modeled here) appear when the engine and query produce them.
+      properties:
+        search_metadata:
+          $ref: '#/components/schemas/SearchMetadata'
+        search_parameters:
+          type: object
+          description: Echo of the request parameters that were applied.
+          additionalProperties: true
+        search_information:
+          $ref: '#/components/schemas/SearchInformation'
+        organic_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganicResult'
+        knowledge_graph:
+          type: object
+          additionalProperties: true
+        answer_box:
+          type: object
+          additionalProperties: true
+        ai_overview:
+          type: object
+          additionalProperties: true
+        related_searches:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        related_questions:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      additionalProperties: true
+    SearchMetadata:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique search identifier.
+        status:
+          type: string
+          description: Request status, e.g. "Success".
+        created_at:
+          type: string
+          format: date-time
+          description: ISO 8601 creation timestamp.
+        request_time_taken:
+          type: number
+          description: Seconds spent on the upstream HTTP request.
+        parsing_time_taken:
+          type: number
+          description: Seconds spent parsing the response.
+        total_time_taken:
+          type: number
+          description: Total processing time in seconds.
+        request_url:
+          type: string
+          description: The upstream search URL that was constructed.
+        html_url:
+          type: string
+          description: SearchApi-hosted HTML results page.
+        json_url:
+          type: string
+          description: SearchApi-hosted JSON results page.
+      additionalProperties: true
+    SearchInformation:
+      type: object
+      description: Query-level statistics (fields vary by engine).
+      additionalProperties: true
+    OrganicResult:
+      type: object
+      properties:
+        position:
+          type: integer
+          description: Result rank on the page.
+        title:
+          type: string
+        link:
+          type: string
+          format: uri
+        source:
+          type: string
+          description: Website name / brand.
+        domain:
+          type: string
+        displayed_link:
+          type: string
+        snippet:
+          type: string
+        snippet_highlighted_words:
+          type: array
+          items:
+            type: string
+        date:
+          type: string
+        thumbnail:
+          type: string
+          description: Thumbnail image (may be a URL or base64 data).
+        favicon:
+          type: string
+        sitelinks:
+          type: object
+          description: Sub-page links with titles/URLs.
+          additionalProperties: true
+      additionalProperties: true
+    Pagination:
+      type: object
+      properties:
+        current:
+          type: integer
+        next:
+          type: string
+          format: uri
+        other_pages:
+          type: object
+          additionalProperties:
+            type: string
+      additionalProperties: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
+      additionalProperties: true

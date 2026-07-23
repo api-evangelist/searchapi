@@ -98,6 +98,9 @@ apis:
       - search-data
       - mcp
     properties:
+      - type: OpenAPI
+        name: SearchApi SERP API (generated from docs)
+        url: openapi/searchapi-search-api-openapi.yml
       - type: Documentation
         url: https://www.searchapi.io/docs/google
       - type: Authentication
