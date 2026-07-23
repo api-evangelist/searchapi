@@ -1,0 +1,78 @@
+generated: '2026-07-23'
+method: searched
+status: published
+source: https://www.searchapi.io/integrations/mcp
+server:
+  name: searchapi
+  transport: http
+  url: https://www.searchapi.io/mcp
+  auth:
+    type: token
+    query_param: token
+    header: X-MCP-Token
+    note: >-
+      Per-integration URL is issued from the dashboard MCP integrations page
+      (https://www.searchapi.io/mcp_integrations). An anonymous POST to the
+      server returns "MCP token required", so the live `tools/list` schema is
+      token-gated; the tools below are enumerated from the published MCP
+      integrations catalog, not from an authenticated introspection.
+  clients:
+    claude_code: 'claude mcp add searchapi "<YOUR_MCP_URL>" --transport http'
+    claude_desktop:
+      command: npx
+      args: [mcp-remote, "<YOUR_MCP_URL>"]
+    cursor: deep-link install from the MCP integrations page
+bundles:
+  note: >-
+    Tools are grouped into configurable "bundles" (a bundle is a set of tools you
+    attach to an assistant). Preconfigured bundles include Google Travel; custom
+    bundles can be assembled from any of the engine tools below.
+  examples: [Google Travel]
+tools:
+  # Enumerated from the published engine catalog on the MCP integrations page.
+  # inputSchema per tool requires authenticated tools/list introspection.
+  - name: google_search
+    description: Structured Google Search (organic, ads, knowledge graph, etc.)
+    source_engine: google
+  - name: google_maps
+    description: Google Maps local results and place data
+    source_engine: google_maps
+  - name: google_news
+    description: Google News results
+    source_engine: google_news
+  - name: google_scholar
+    description: Google Scholar academic results (incl. case law)
+    source_engine: google_scholar
+  - name: google_shopping
+    description: Google Shopping product results
+    source_engine: google_shopping
+  - name: google_flights
+    description: Google Flights round-trip / one-way search
+    source_engine: google_flights
+  - name: google_hotels
+    description: Google Hotels search
+    source_engine: google_hotels
+  - name: google_jobs
+    description: Google Jobs listings
+    source_engine: google_jobs
+  - name: google_trends
+    description: Google Trends interest-over-time and related queries
+    source_engine: google_trends
+  - name: youtube_search
+    description: YouTube search results
+    source_engine: youtube
+  - name: bing_search
+    description: Bing web search results
+    source_engine: bing
+  - name: amazon_search
+    description: Amazon product search and product detail
+    source_engine: amazon
+  - name: walmart_search
+    description: Walmart product search, store discovery, and reviews
+    source_engine: walmart
+  - name: ebay_search
+    description: eBay marketplace search
+    source_engine: ebay
+  - name: apple_maps
+    description: Apple Maps search, place, and guide lookups
+    source_engine: apple_maps

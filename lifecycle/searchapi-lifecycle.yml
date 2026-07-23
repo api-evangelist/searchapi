@@ -1,0 +1,21 @@
+generated: '2026-07-23'
+method: searched
+source: https://www.searchapi.io/docs/google
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://www.searchapi.io/docs/google
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: >-
+    No formal deprecation/Sunset (RFC 8594) policy is published. Engine-layout
+    changes and upstream retirements (e.g. Google fixing web results at 10 per
+    page after retiring `num` in Sep 2025) are communicated via the monthly
+    announcements changelog rather than a versioned deprecation policy.
+sla:
+  url: null
+  note: Uptime commitments handled at the enterprise/plan tier; no public SLA page.
+status_page: https://status.searchapi.io/
+changelog: https://www.searchapi.io/announcements
+deprecated_operations: []

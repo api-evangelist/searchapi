@@ -1,0 +1,30 @@
+generated: '2026-07-23'
+method: searched
+source: https://www.searchapi.io/announcements
+standards:
+  - id: iso-27001-2022
+    conforms: true
+    evidence: >-
+      ISO/IEC 27001:2022 certification announced in the June 2026 update
+      (https://www.searchapi.io/announcements).
+  - id: gdpr
+    conforms: true
+    evidence: >-
+      Data Processing Agreement published at https://www.searchapi.io/legal/dpa;
+      zero-retention (no-logging) request option available on enterprise plans.
+  - id: oauth2
+    conforms: false
+    evidence: API-key auth only; no OAuth2 flows.
+  - id: openidconnect
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors returned as plain JSON `error` messages, not application/problem+json.
+  - id: json-api
+    conforms: false
+compliance:
+  certifications:
+    - ISO/IEC 27001:2022
+    - GDPR (DPA)
+  data_processing_agreement: https://www.searchapi.io/legal/dpa
+  zero_retention_option: true

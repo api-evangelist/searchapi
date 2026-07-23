@@ -1,0 +1,40 @@
+generated: '2026-07-23'
+method: searched
+source: https://github.com/SearchApi
+note: >-
+  SearchApi is a raw-HTTP/JSON API and does not ship a traditional per-language
+  REST SDK — the docs instead publish copy-paste code samples in Python, Node,
+  Ruby, Java, Go, PHP, Bash, R, Kotlin, Swift, C#, C, and C++. The first-party
+  distributables below are integration/agent connectors published under the
+  SearchApi GitHub org, plus the official Postman collection. Because there is no
+  first-party REST client library, no `SDKs` pointer is emitted (that would
+  overstate the surface).
+packages:
+  - kind: mcp-server
+    name: searchapi-mcp
+    registry: github
+    url: https://github.com/SearchApi/searchapi-mcp
+    install: git clone https://github.com/SearchApi/searchapi-mcp
+    official: true
+    description: SearchAPI MCP Server for AI assistants (first-party, SearchApi org).
+  - kind: n8n-node
+    language: typescript
+    name: n8n-nodes-searchapi
+    registry: github
+    url: https://github.com/SearchApi/n8n-nodes-searchapi
+    official: true
+    description: >-
+      Community n8n node (published under the SearchApi org) for pulling
+      structured JSON from Google, Bing, YouTube, and other engines.
+  - kind: make-app
+    name: searchapi-make-app
+    registry: github
+    url: https://github.com/SearchApi/searchapi-make-app
+    official: true
+    description: SearchApi app/connector for Make.com (first-party, SearchApi org).
+  - kind: postman-collection
+    name: SearchApi Official Postman Collection
+    registry: postman
+    url: https://www.postman.com/searchapiofficial/searchapi-official-postman-collection/
+    official: true
+    description: First-party Postman workspace covering the SERP/search engines.

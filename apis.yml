@@ -17,7 +17,7 @@ x-tier: stub
 x-tier-reason: engagement
 specificationVersion: '0.21'
 created: '2026-07-23'
-modified: '2026-07-23'
+modified: '2026-07-24'
 tags:
   - search
   - serp-api
@@ -31,8 +31,57 @@ tags:
 common:
   - type: Website
     url: https://www.searchapi.io/
+  - type: DeveloperPortal
+    url: https://www.searchapi.io/docs/google
   - type: Documentation
-    url: https://www.searchapi.io/docs
+    url: https://www.searchapi.io/docs/google
+  - type: APIReference
+    url: https://www.searchapi.io/docs/google
+  - type: Pricing
+    url: https://www.searchapi.io/pricing
+  - type: SignUp
+    url: https://www.searchapi.io/users/sign_up
+  - type: Login
+    url: https://www.searchapi.io/users/sign_in
+  - type: Support
+    url: mailto:support@searchapi.io
+  - type: GitHubOrganization
+    url: https://github.com/SearchApi
+  - type: TermsOfService
+    url: https://www.searchapi.io/legal/terms
+  - type: PrivacyPolicy
+    url: https://www.searchapi.io/legal/privacy
+  - type: StatusPage
+    url: https://status.searchapi.io/
+  - type: ChangeLog
+    name: Announcements changelog
+    url: https://www.searchapi.io/announcements
+  - type: Postman
+    name: SearchApi Official Postman Collection
+    url: https://www.postman.com/searchapiofficial/searchapi-official-postman-collection/
+  - type: Compliance
+    name: ISO/IEC 27001:2022 + GDPR (DPA)
+    url: https://www.searchapi.io/legal/dpa
+  - type: MCPServer
+    name: SearchApi hosted MCP server
+    url: mcp/searchapi-mcp.yml
+  - type: Authentication
+    url: authentication/searchapi-authentication.yml
+  - type: Conventions
+    url: conventions/searchapi-conventions.yml
+  - type: Packages
+    url: packages/searchapi-packages.yml
+  - type: ChangeLog
+    name: Structured changelog artifact
+    url: changelog/searchapi-changelog.yml
+  - type: Lifecycle
+    url: lifecycle/searchapi-lifecycle.yml
+  - type: Conformance
+    url: conformance/searchapi-conformance.yml
+  - type: DomainSecurity
+    url: security/searchapi-domain-security.yml
+  - type: LLMsTxt
+    url: llms/searchapi-llms.txt
 apis:
   - name: SearchApi SERP API
     description: >-
@@ -40,7 +89,7 @@ apis:
       Scholar, Images, Shopping, Trends, Jobs, YouTube, Amazon, Walmart, eBay). Single /api/v1/search
       endpoint parameterized by engine, with server-side proxy rotation, CAPTCHA handling, and
       location/locale targeting. Bearer API-key auth.
-    humanURL: https://www.searchapi.io/docs
+    humanURL: https://www.searchapi.io/docs/google
     baseURL: https://www.searchapi.io/api/v1/search
     tags:
       - search
@@ -50,7 +99,11 @@ apis:
       - mcp
     properties:
       - type: Documentation
-        url: https://www.searchapi.io/docs
+        url: https://www.searchapi.io/docs/google
+      - type: Authentication
+        url: authentication/searchapi-authentication.yml
+      - type: MCPServer
+        url: mcp/searchapi-mcp.yml
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

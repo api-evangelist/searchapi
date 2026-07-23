@@ -1,0 +1,34 @@
+generated: '2026-07-23'
+method: searched
+source: https://www.searchapi.io/docs/google
+docs: https://www.searchapi.io/docs/google
+summary:
+  types: [apiKey, http]
+  api_key_in: [query, header]
+  oauth2_flows: []
+  note: >-
+    SearchApi uses a single API key. It may be supplied either as an `api_key`
+    query parameter or as an HTTP `Authorization: Bearer <API_KEY>` header. There
+    is no OAuth surface for the REST API. The hosted MCP server authenticates the
+    same key via a `?token=` query parameter or an `X-MCP-Token` request header.
+schemes:
+  - name: ApiKeyQuery
+    type: apiKey
+    in: query
+    parameter: api_key
+    description: API key supplied as the `api_key` query-string parameter.
+    sources: [https://www.searchapi.io/docs/google]
+  - name: BearerAuth
+    type: http
+    scheme: bearer
+    bearerFormat: opaque
+    description: "API key supplied as an `Authorization: Bearer <API_KEY>` header."
+    sources: [https://www.searchapi.io/docs/google]
+  - name: McpToken
+    type: apiKey
+    in: header
+    parameter: X-MCP-Token
+    description: >-
+      Hosted MCP server token (the same account API key); also accepted as a
+      `?token=` query parameter. Obtain from the dashboard MCP integrations page.
+    sources: [https://www.searchapi.io/mcp]

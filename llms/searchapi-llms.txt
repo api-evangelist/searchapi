@@ -1,0 +1,39 @@
+# SearchApi
+
+> SearchApi is a real-time SERP and search-data API that gives applications and AI agents structured JSON access to results from 100+ search engines — Google Search, Maps, News, Scholar, Images, Shopping, Trends, Jobs; YouTube, Bing, Baidu, Yandex, DuckDuckGo; and marketplaces like Amazon, Walmart, and eBay. It handles proxy rotation, CAPTCHA solving, and geographic/locale targeting server-side, and ships a hosted MCP server plus configurable tool "bundles" so agents can be handed a capability instead of a whole catalog.
+
+## API
+- Base URL: https://www.searchapi.io/api/v1/search (single endpoint, parameterized by `engine`)
+- Methods: GET and POST
+- Auth: API key as `api_key` query param OR `Authorization: Bearer <API_KEY>` header
+- Required params: `engine`, `q`. Common: `location`, `gl`, `hl`, `device`, `page`, `time_period`, `safe`
+- Response: JSON with `search_metadata`, `search_parameters`, `search_information`, `organic_results`, plus engine-specific blocks (`ads`, `local_results`, `jobs`, `shopping_ads`, ...), and `pagination`
+
+## Docs
+- Documentation & API reference: https://www.searchapi.io/docs/google
+- Pricing (pay-per-success, monthly quotas): https://www.searchapi.io/pricing
+- Changelog / announcements: https://www.searchapi.io/announcements
+- Status: https://status.searchapi.io/
+- Postman collection: https://www.postman.com/searchapiofficial/searchapi-official-postman-collection/
+- Terms: https://www.searchapi.io/legal/terms
+- Privacy: https://www.searchapi.io/legal/privacy
+- Data Processing Agreement: https://www.searchapi.io/legal/dpa
+- GitHub: https://github.com/SearchApi
+
+## Agents / MCP
+- Hosted MCP server: https://www.searchapi.io/mcp (HTTP transport; token via `?token=` or `X-MCP-Token`)
+- MCP integrations & bundles: https://www.searchapi.io/integrations/mcp
+- Setup: `claude mcp add searchapi "<YOUR_MCP_URL>" --transport http` (Claude Code); `npx mcp-remote "<YOUR_MCP_URL>"` (Claude Desktop)
+
+## Compliance
+- ISO/IEC 27001:2022 certified; GDPR (DPA available); enterprise zero-retention option
+
+## Repo artifacts (API Evangelist)
+- Authentication: authentication/searchapi-authentication.yml
+- Conventions: conventions/searchapi-conventions.yml
+- MCP server: mcp/searchapi-mcp.yml
+- Packages/connectors: packages/searchapi-packages.yml
+- Changelog: changelog/searchapi-changelog.yml
+- Lifecycle: lifecycle/searchapi-lifecycle.yml
+- Conformance: conformance/searchapi-conformance.yml
+- Domain security: security/searchapi-domain-security.yml

@@ -1,0 +1,62 @@
+generated: '2026-07-23'
+method: searched
+source: https://www.searchapi.io/docs/google
+authentication:
+  style: api-key
+  transport: [query:api_key, header:Authorization-Bearer]
+  ref: authentication/searchapi-authentication.yml
+request:
+  base_url: https://www.searchapi.io/api/v1/search
+  methods: [GET, POST]
+  post_support: 'HTTP POST supported (added January 2026) as an alternative to GET.'
+  required_params: [engine, q]
+  engine_param: >-
+    A single `/api/v1/search` endpoint is parameterized by `engine`
+    (google, google_maps, bing, amazon, youtube, ...); the response shape varies
+    per engine.
+idempotency:
+  supported: false
+  note: >-
+    Search is a read/query operation and no idempotency-key mechanism is
+    documented. No `Idempotency` pointer is emitted.
+pagination:
+  style: page-number
+  params: [page]
+  response_field: pagination
+  note: >-
+    Responses include a `pagination` object (`current`, `next`). Google web
+    results are fixed at 10 per page since Google phased out `num` in Sep 2025;
+    the `page` parameter walks result pages.
+localization:
+  params: [location, gl, hl, device, google_domain, time_period, safe]
+  note: Geographic and locale targeting handled server-side (proxy rotation + geo).
+response_envelope:
+  format: json
+  top_level_fields:
+    - search_metadata      # id, status, request_url, timings
+    - search_parameters    # echo of inputs
+    - search_information    # query stats, total results, time taken
+    - organic_results
+    - ads
+    - related_searches
+    - pagination
+  status_field: search_metadata.status   # e.g. "Success"
+request_tracing:
+  request_id_field: search_metadata.id
+  note: Each response carries a request id under `search_metadata`.
+versioning:
+  scheme: uri-path
+  current: v1
+  ref: lifecycle/searchapi-lifecycle.yml
+errors:
+  note: >-
+    Errors are returned as JSON with an `error` message; standard HTTP status
+    codes apply (401 unauthorized observed on protected endpoints). No RFC 9457
+    problem+json envelope is documented.
+rate_limits:
+  model: plan-quota
+  note: >-
+    Billing is per successful search against a monthly plan quota
+    (pay-per-success; failed requests are not charged). No per-second rate-limit
+    header contract is documented; concurrency scales with plan tier.
+  ref: https://www.searchapi.io/pricing

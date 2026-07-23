@@ -1,0 +1,98 @@
+generated: '2026-07-23'
+method: searched
+source: https://www.searchapi.io/announcements
+scheme: monthly-dated-updates
+current: '2026-07'
+url: https://www.searchapi.io/announcements
+entries:
+  - date: '2026-07-02'
+    title: June 2026 Update
+    additions: true
+    breaking: false
+    highlights:
+      - ISO/IEC 27001:2022 certification announced
+      - Apple Maps APIs (search, places, guides)
+      - Bing Copilot API
+      - Google Maps Directions Search Along Route API
+  - date: '2026-06-05'
+    title: May 2026 Update
+    additions: true
+    breaking: false
+    highlights:
+      - Amazon Categories API
+      - BestBuy Product API
+      - Airbnb Experience Details and Availability Calendar APIs
+      - Google Scholar Case Law API
+      - MCP tool bundles
+  - date: '2026-05-05'
+    title: May 2026 Update
+    additions: true
+    breaking: false
+    highlights:
+      - BestBuy Search API
+      - Zillow Property API
+      - Bing Product API
+      - TripAdvisor Place and Reviews APIs
+      - Search Analytics API
+  - date: '2026-04-03'
+    title: April 2026 Update
+    additions: true
+    breaking: false
+    highlights:
+      - Zillow API
+      - Amazon Bestsellers API
+      - Google Travel Explore Destination API
+      - DuckDuckGo Images and Videos APIs
+  - date: '2026-03-06'
+    title: March 2026 Update
+    additions: true
+    breaking: false
+    highlights:
+      - Bing Shopping API
+      - Google Related Questions API
+      - Meta Ad Library Page Info API
+  - date: '2026-02-05'
+    title: February 2026 Update
+    additions: true
+    breaking: false
+    highlights:
+      - DuckDuckGo Light API
+      - TripAdvisor API
+      - Google About This Domain API
+      - Google Local API
+  - date: '2026-01-09'
+    title: January 2026 Update
+    additions: true
+    breaking: false
+    highlights:
+      - MCP Integration with travel tool bundles
+      - Google Shopping Autocomplete API
+      - Walmart Reviews API
+      - HTTP POST support
+  - date: '2025-12-04'
+    title: December 2025 Update
+    additions: true
+    breaking: false
+    highlights:
+      - Airbnb Property and Property Reviews APIs
+      - Yandex Reverse Image API
+      - Google Shorts API
+      - Google Books API
+  - date: '2025-11-05'
+    title: November 2025 Update
+    additions: true
+    breaking: false
+    highlights:
+      - Google AI Overview API
+      - Airbnb API
+      - Google Maps Directions API
+      - Google News Portal API
+  - date: '2025-10-02'
+    title: October 2025 Update
+    additions: true
+    breaking: false
+    highlights:
+      - Google Rank Tracker API (num=100)
+      - Google AI Mode API
+      - Yandex Search API
+      - Bing Videos API
