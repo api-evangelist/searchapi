@@ -1,0 +1,58 @@
+aid: searchapi
+name: SearchApi
+description: >-
+  SearchApi is a real-time SERP and search-data API that gives applications and AI agents structured
+  access to results from 100+ search engines — Google Search, Google Maps, Google News, Google Scholar,
+  Google Images, Google Shopping, Google Trends, Google Jobs, YouTube, Bing, Baidu, and marketplace
+  engines like Amazon, Walmart, and eBay — returning clean JSON instead of scraped HTML. It handles
+  proxy rotation, CAPTCHA solving, and geographic/locale targeting server-side, and ships an MCP server
+  plus "use-case bundles" that group selected endpoints around a job so agents can be handed a capability
+  rather than a whole catalog. Used for SEO/rank tracking, market and price intelligence, RAG grounding,
+  and agentic research workflows.
+image: https://www.searchapi.io/og-image.png
+url: https://raw.githubusercontent.com/api-evangelist/searchapi/refs/heads/main/apis.yml
+x-type: company
+x-source: engagement:searchapi
+x-tier: stub
+x-tier-reason: engagement
+specificationVersion: '0.21'
+created: '2026-07-23'
+modified: '2026-07-23'
+tags:
+  - search
+  - serp-api
+  - google-search
+  - web-scraping
+  - search-data
+  - market-intelligence
+  - seo
+  - mcp
+  - agent-native
+common:
+  - type: Website
+    url: https://www.searchapi.io/
+  - type: Documentation
+    url: https://www.searchapi.io/docs
+apis:
+  - name: SearchApi SERP API
+    description: >-
+      REST API returning structured JSON search results across 100+ engines (Google, Bing, Maps, News,
+      Scholar, Images, Shopping, Trends, Jobs, YouTube, Amazon, Walmart, eBay). Single /api/v1/search
+      endpoint parameterized by engine, with server-side proxy rotation, CAPTCHA handling, and
+      location/locale targeting. Bearer API-key auth.
+    humanURL: https://www.searchapi.io/docs
+    baseURL: https://www.searchapi.io/api/v1/search
+    tags:
+      - search
+      - serp-api
+      - google-search
+      - search-data
+      - mcp
+    properties:
+      - type: Documentation
+        url: https://www.searchapi.io/docs
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
+  - FN: APIs.json
+    email: info@apis.io
