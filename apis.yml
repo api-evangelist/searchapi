@@ -17,7 +17,7 @@ x-tier: stub
 x-tier-reason: engagement
 specificationVersion: '0.21'
 created: '2026-07-23'
-modified: '2026-07-24'
+modified: '2026-08-13'
 tags:
   - search
   - serp-api
@@ -80,8 +80,38 @@ common:
     url: conformance/searchapi-conformance.yml
   - type: DomainSecurity
     url: security/searchapi-domain-security.yml
+  - type: TrustCenter
+    name: SearchApi trust center
+    url: security/searchapi-trust-center.yml
   - type: LLMsTxt
     url: llms/searchapi-llms.txt
+  - type: WellKnown
+    name: Well-known probe (OAuth AS + protected-resource metadata served)
+    url: well-known/searchapi-well-known.yml
+  - type: OAuthScopes
+    name: OAuth scopes (MCP surface)
+    url: scopes/searchapi-scopes.yml
+  - type: RateLimits
+    url: rate-limits/searchapi-rate-limits.yml
+  - type: Plans
+    url: plans/searchapi-plans-pricing.yml
+  - type: ErrorCatalog
+    url: errors/searchapi-problem-types.yml
+  - type: DataModel
+    url: data-model/searchapi-data-model.yml
+  - type: ToolCrosswalk
+    name: MCP tool to REST operation crosswalk
+    url: mcp/searchapi-tool-crosswalk.yml
+  - type: AgentSkill
+    name: Packaged Agent Skills
+    url: skills/_index.yml
+  - type: Overlay
+    name: API Evangelist enhancements overlay
+    url: overlays/searchapi-search-api-overlay.yaml
+  - type: PostmanCollection
+    url: collections/searchapi-search-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/searchapi-search-api.opencollection.json
 apis:
   - name: SearchApi SERP API
     description: >-
@@ -107,8 +137,68 @@ apis:
         url: authentication/searchapi-authentication.yml
       - type: MCPServer
         url: mcp/searchapi-mcp.yml
+      - type: Overlay
+        url: overlays/searchapi-search-api-overlay.yaml
+      - type: ErrorCatalog
+        url: errors/searchapi-problem-types.yml
+      - type: RateLimits
+        url: rate-limits/searchapi-rate-limits.yml
+      - type: DataModel
+        url: data-model/searchapi-data-model.yml
+      - type: Conventions
+        url: conventions/searchapi-conventions.yml
+      - type: ToolCrosswalk
+        url: mcp/searchapi-tool-crosswalk.yml
+      - type: PostmanCollection
+        url: collections/searchapi-search-api.postman_collection.json
+      - type: OpenCollection
+        url: collections/searchapi-search-api.opencollection.json
+      - type: AgentSkill
+        name: Grounded web research
+        url: skills/searchapi-grounded-web-research.md
+  - name: SearchApi Account & Analytics API
+    description: >-
+      The two account-management endpoints SearchApi documents alongside its SERP surface.
+      GET /api/v1/me returns the calling key's monthly allowance, month-to-date usage,
+      remaining credits, searches made in the current hour and the hourly rate limit.
+      GET /api/v1/search_analytics returns aggregated success rate, error rate and latency
+      for the account's own searches, bucketed daily or hourly and optionally filtered to a
+      single engine. These are the only endpoints exposing runtime quota and reliability
+      signal — SearchApi returns no rate-limit response headers, so polling /api/v1/me is
+      the sole machine-readable view of remaining headroom.
+    humanURL: https://www.searchapi.io/docs/account-api
+    baseURL: https://www.searchapi.io/api/v1
+    tags:
+      - account
+      - usage
+      - rate-limits
+      - analytics
+      - observability
+    properties:
+      - type: OpenAPI
+        name: SearchApi Account & Analytics API (generated from docs)
+        url: openapi/searchapi-account-api-openapi.yml
+      - type: Documentation
+        url: https://www.searchapi.io/docs/account-api
+      - type: APIReference
+        name: Search Analytics API
+        url: https://www.searchapi.io/docs/search-analytics-api
+      - type: Authentication
+        url: authentication/searchapi-authentication.yml
+      - type: RateLimits
+        url: rate-limits/searchapi-rate-limits.yml
+      - type: Plans
+        url: plans/searchapi-plans-pricing.yml
+      - type: AgentSkill
+        name: Quota-aware batch searching
+        url: skills/searchapi-quota-aware-batch.md
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
   - FN: APIs.json
     email: info@apis.io
+x-enrichment:
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1
