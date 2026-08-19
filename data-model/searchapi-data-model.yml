@@ -1,0 +1,152 @@
+generated: '2026-08-13'
+method: derived
+source:
+  - openapi/searchapi-search-api-openapi.yml
+  - openapi/searchapi-account-api-openapi.yml
+  - https://www.searchapi.io/docs/google
+  - https://www.searchapi.io/docs/account-api
+note: >-
+  SearchApi has no persistent resource graph. It is a query API: nothing is created, no
+  entity has a durable server-assigned identifier that a later call can dereference, and
+  there are no id-reference fields pointing between objects. The "data model" is therefore
+  a RESPONSE ENVELOPE composition — one root object per search that contains sibling
+  result blocks — plus two account-scoped read models. Recording it that way is the honest
+  shape; forcing has_one/has_many relationships onto an ephemeral SERP payload would
+  invent a graph that does not exist.
+shape: response-envelope
+identifier_model:
+  durable_ids: false
+  note: >-
+    `search_metadata.id` identifies the REQUEST, not a retrievable resource. There is no
+    documented GET-by-id to re-fetch a prior search. The only cursor-like value is
+    `next_page_token`, which is opaque, grows with depth, and is scoped to one pagination
+    walk.
+  id_prefixes: []
+entities:
+  - name: SearchResponse
+    kind: envelope
+    root: true
+    description: Root object returned by GET/POST /api/v1/search.
+    source: openapi/searchapi-search-api-openapi.yml#/components/schemas/SearchResponse
+  - name: SearchMetadata
+    kind: value-object
+    description: Request id, status, request_url and timing for this search.
+    key_fields: [id, status, request_url]
+  - name: SearchParameters
+    kind: value-object
+    description: Verbatim echo of the inputs the search was run with.
+  - name: SearchInformation
+    kind: value-object
+    description: Query statistics — total results, time taken.
+  - name: OrganicResult
+    kind: result-item
+    description: One organic search result (position, title, link, snippet).
+  - name: Pagination
+    kind: value-object
+    description: Page cursor block (`current`, `next`), plus `next_page_token` on deeper surfaces.
+  - name: AnswerBox
+    kind: result-item
+    engine_specific: true
+    description: Direct answer block; sub-shape varies by answer type (currency, weather, finance).
+  - name: KnowledgeGraph
+    kind: result-item
+    engine_specific: true
+    description: Entity panel with ratings, description and images.
+  - name: LocalResult
+    kind: result-item
+    engine_specific: true
+    description: Nearby business with rating; populated by google and google_maps engines.
+  - name: Ad
+    kind: result-item
+    engine_specific: true
+    description: Paid search advertisement.
+  - name: ShoppingAd
+    kind: result-item
+    engine_specific: true
+    description: Product listing with price.
+  - name: RelatedSearch
+    kind: result-item
+    engine_specific: true
+  - name: Error
+    kind: envelope
+    description: 'Flat `{"error": "<message>"}` failure body. Not RFC 9457.'
+    ref: errors/searchapi-problem-types.yml
+  - name: AccountResponse
+    kind: read-model
+    description: Plan usage, credits and hourly rate-limit headroom from GET /api/v1/me.
+    key_fields: [account, api_usage, subscription]
+    source: openapi/searchapi-account-api-openapi.yml#/components/schemas/AccountResponse
+  - name: SearchAnalyticsResponse
+    kind: read-model
+    description: Aggregated success rate, error rate and latency buckets from GET /api/v1/search_analytics.
+    key_fields: [search_parameters, summary, performance_by_engine, buckets]
+composition:
+  - parent: SearchResponse
+    child: SearchMetadata
+    cardinality: has_one
+    via: search_metadata
+  - parent: SearchResponse
+    child: SearchParameters
+    cardinality: has_one
+    via: search_parameters
+  - parent: SearchResponse
+    child: SearchInformation
+    cardinality: has_one
+    via: search_information
+  - parent: SearchResponse
+    child: OrganicResult
+    cardinality: has_many
+    via: organic_results
+  - parent: SearchResponse
+    child: Pagination
+    cardinality: has_one
+    via: pagination
+  - parent: SearchResponse
+    child: AnswerBox
+    cardinality: has_one
+    via: answer_box
+    conditional: engine and query dependent
+  - parent: SearchResponse
+    child: KnowledgeGraph
+    cardinality: has_one
+    via: knowledge_graph
+    conditional: engine and query dependent
+  - parent: SearchResponse
+    child: LocalResult
+    cardinality: has_many
+    via: local_results
+    conditional: engine and query dependent
+  - parent: SearchResponse
+    child: Ad
+    cardinality: has_many
+    via: ads
+    conditional: engine and query dependent
+  - parent: SearchResponse
+    child: ShoppingAd
+    cardinality: has_many
+    via: shopping_ads
+    conditional: engine and query dependent
+  - parent: SearchResponse
+    child: RelatedSearch
+    cardinality: has_many
+    via: related_searches
+    conditional: engine and query dependent
+  - parent: AccountResponse
+    child: null
+    cardinality: has_one
+    via: 'account / api_usage / subscription (inline objects, no shared entity)'
+relationships: []
+relationships_note: >-
+  Intentionally empty. No field in any response is a foreign key into another SearchApi
+  resource. Cross-object linkage exists only OUTSIDE the API — `link` fields point at the
+  originating third-party site (google.com, amazon.com), not back into SearchApi.
+polymorphism:
+  discriminator: engine
+  note: >-
+    The response schema is polymorphic on the request's `engine` parameter, not on a field
+    inside the payload. Which blocks are present, and their internal shape, is determined
+    by the engine chosen at call time. A consumer must key off the engine it asked for; the
+    body carries no type tag. This is the single most important thing to know when writing
+    a parser against SearchApi.
+render: null
+checked: '2026-08-13'

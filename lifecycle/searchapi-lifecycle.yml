@@ -1,21 +1,65 @@
-generated: '2026-07-23'
+generated: '2026-08-13'
 method: searched
-source: https://www.searchapi.io/docs/google
+source:
+  - https://www.searchapi.io/docs/google
+  - https://www.searchapi.io/announcements
+  - https://status.searchapi.io/
 versioning:
   scheme: uri-path
   current: v1
   docs: https://www.searchapi.io/docs/google
+  note: >-
+    `v1` is the only version ever published and has not moved. New capability ships as new
+    `engine` values on the same operation rather than as new API versions, so the version
+    number carries almost no information — the changelog does.
 deprecation:
   policy_url: null
   sunset_header: false
+  deprecation_header: false
+  rfc8594: false
   note: >-
-    No formal deprecation/Sunset (RFC 8594) policy is published. Engine-layout
-    changes and upstream retirements (e.g. Google fixing web results at 10 per
-    page after retiring `num` in Sep 2025) are communicated via the monthly
-    announcements changelog rather than a versioned deprecation policy.
+    No formal deprecation/Sunset (RFC 8594) policy is published, and no Sunset or
+    Deprecation response headers are emitted. Engine-layout changes and upstream
+    retirements are communicated only through the monthly announcements post. The clearest
+    example in the record: Google fixed web results at 10 per page after retiring `num` in
+    September 2025, which silently changed the meaning of a documented parameter — the
+    docs now read "Phased out by Google on September 2025. It is now constant 10." A
+    consumer with an automated integration had no header, no version bump and no advance
+    notice; the parameter simply stopped doing anything.
+  upstream_risk: >-
+    SearchApi's contract is downstream of engines it does not control. That makes the
+    absence of a deprecation channel structurally more consequential here than for a
+    provider that owns its own data.
 sla:
   url: null
-  note: Uptime commitments handled at the enterprise/plan tier; no public SLA page.
-status_page: https://status.searchapi.io/
-changelog: https://www.searchapi.io/announcements
+  uptime_commitment: null
+  note: >-
+    No public SLA page. Uptime commitments are handled at the enterprise/plan tier through
+    sales.
+status_page:
+  url: https://status.searchapi.io/
+  status: 200
+  machine_readable: false
+  note: >-
+    Human status page only. No Statuspage-style JSON API — probed /api/v2/status.json and
+    /history.rss on 2026-08-13, both HTTP 404. An agent cannot check SearchApi's health
+    programmatically; it can only observe its own error rate, which is what
+    GET /api/v1/search_analytics is for.
+  checked: '2026-08-13'
+changelog:
+  url: https://www.searchapi.io/announcements
+  cadence: monthly
+  latest: '2026-08-06'
+  ref: changelog/searchapi-changelog.yml
+  note: >-
+    Eleven consecutive monthly posts in the recorded window (2025-10 through 2026-08), all
+    additive, none breaking. Dated and consistent — the strongest lifecycle signal this
+    provider gives.
 deprecated_operations: []
+observability:
+  self_service_analytics: https://www.searchapi.io/docs/search-analytics-api
+  note: >-
+    GET /api/v1/search_analytics returns the account's own per-engine success rate, error
+    rate and latency buckets. In the absence of a machine-readable status page this is the
+    practical health signal.
+checked: '2026-08-13'

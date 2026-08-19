@@ -1,0 +1,105 @@
+generated: '2026-08-13'
+method: probed
+source: live HTTPS probes of every SearchApi host in apis.yml
+note: >-
+  Two real documents are served: RFC 8414 OAuth Authorization Server Metadata and
+  RFC 9728 OAuth Protected Resource Metadata. Both exist because SearchApi's hosted
+  MCP server (https://www.searchapi.io/mcp) now accepts OAuth bearer tokens in
+  addition to the legacy static X-MCP-Token header — the protected-resource document
+  names the MCP endpoint as the resource. Every other probed path returns HTTP 404
+  with the Rails application's HTML 404 page (17,478 bytes), which is a miss, not a
+  document. The trust-center host (security.searchapi.io) is a Vite single-page app
+  whose catch-all answers HTTP 200 with a 604-byte HTML shell for EVERY path,
+  including /.well-known/security.txt and /.well-known/agent-card.json — those are
+  recorded as soft-200 shells and explicitly NOT counted as hits.
+hosts:
+  - host: www.searchapi.io
+    paths:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        content_type: application/json
+        hit: true
+        file: well-known/searchapi-oauth-authorization-server.json
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        content_type: application/json
+        hit: true
+        file: well-known/searchapi-oauth-protected-resource.json
+      - path: /.well-known/oauth-protected-resource/mcp
+        status: 200
+        content_type: application/json
+        hit: true
+        note: >-
+          Resource-specific variant advertised in the WWW-Authenticate header returned
+          by an anonymous POST to /mcp; body is byte-identical to the root
+          protected-resource document, so it is not saved twice.
+      - path: /.well-known/security.txt
+        status: 404
+        hit: false
+      - path: /.well-known/openid-configuration
+        status: 404
+        hit: false
+      - path: /.well-known/api-catalog
+        status: 404
+        hit: false
+      - path: /.well-known/ai-plugin.json
+        status: 404
+        hit: false
+      - path: /.well-known/agent-card.json
+        status: 404
+        hit: false
+      - path: /.well-known/agent.json
+        status: 404
+        hit: false
+      - path: /.well-known/mcp.json
+        status: 404
+        hit: false
+      - path: /security.txt
+        status: 404
+        hit: false
+      - path: /llms.txt
+        status: 404
+        hit: false
+      - path: /robots.txt
+        status: 200
+        content_type: text/plain
+        hit: true
+        note: 'Served, 130 bytes. Single rule: User-agent * / Disallow /api/.'
+  - host: searchapi.io
+    paths:
+      - path: /.well-known/security.txt
+        status: 404
+        hit: false
+      - path: /security.txt
+        status: 404
+        hit: false
+  - host: security.searchapi.io
+    note: >-
+      Trust-center SPA. Catch-all returns 200 + a 604-byte HTML shell for every path,
+      so a 200 here is not evidence of a document.
+    paths:
+      - path: /.well-known/security.txt
+        status: 200
+        hit: false
+        soft_200: true
+        content_type: text/html
+      - path: /.well-known/agent-card.json
+        status: 200
+        hit: false
+        soft_200: true
+        content_type: text/html
+  - host: status.searchapi.io
+    paths:
+      - path: /.well-known/agent-card.json
+        status: 404
+        hit: false
+summary:
+  documents_served: 3
+  security_txt: false
+  openid_configuration: false
+  oauth_authorization_server: true
+  oauth_protected_resource: true
+  agent_card: false
+  ai_plugin: false
+  api_catalog: false
+checked: '2026-08-13'

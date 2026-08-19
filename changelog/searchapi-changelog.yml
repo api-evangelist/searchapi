@@ -1,10 +1,26 @@
-generated: '2026-07-23'
+generated: '2026-08-13'
 method: searched
 source: https://www.searchapi.io/announcements
 scheme: monthly-dated-updates
-current: '2026-07'
+current: '2026-08'
 url: https://www.searchapi.io/announcements
+cadence: >-
+  One dated "<Month> Update" post per month, published in the first week of the following
+  month, since at least October 2025 — eleven consecutive months with no gap. Entries are
+  additive engine launches; no breaking change has been announced in the recorded window.
+  There is no per-release version number: the API is unversioned past `v1` in the URI path.
 entries:
+  - date: '2026-08-06'
+    title: 'July 2026: Update'
+    additions: true
+    breaking: false
+    highlights:
+      - GDPR Compliant — data protection program and subprocessor documentation in the Trust Center
+      - ChatGPT API — answers as formatted JSON with text blocks, markdown and reference links
+      - Gemini API — text blocks, grounding sources, inline images and response metadata
+      - Perplexity API — cited answers with reference links and related questions
+      - TikTok Profile Videos API — public account video feeds with engagement metrics
+      - Apple App Store Top Grossing API — top-grossing app rankings by country
   - date: '2026-07-02'
     title: June 2026 Update
     additions: true

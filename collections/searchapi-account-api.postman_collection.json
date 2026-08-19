@@ -1,0 +1,438 @@
+{
+  "item": [
+    {
+      "id": "9cdabfa9-5dd0-41ce-84b9-eec38db5cbdf",
+      "name": "account",
+      "description": {
+        "content": "Plan usage, credits and rate-limit headroom for the authenticated API key.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "89f2d7dd-8c99-4567-a0d3-af01e413eca4",
+          "name": "Get account usage, credits and hourly rate limit",
+          "request": {
+            "name": "Get account usage, credits and hourly rate limit",
+            "description": {
+              "content": "Returns the authenticated key's monthly allowance, month-to-date usage, remaining credits, searches made in the current hour, the hourly rate limit, and the current subscription period. Poll this to stay inside the documented cap of 20% of the plan's monthly credits per hour.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "me"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api_key",
+                  "value": "<string>",
+                  "description": "API key. Optional here only because the same key may instead be sent as `Authorization: Bearer <API_KEY>`; one of the two is required."
+                },
+                {
+                  "disabled": false,
+                  "key": "zero_retention",
+                  "value": "<boolean>",
+                  "description": "Enterprise-only. Set to `true` to disable logging and storage of the request for compliance purposes."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "98c4e2d5-faa8-49a2-8e79-037253fc1ebc",
+              "name": "Account usage snapshot.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "me"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "zero_retention",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"account\": {\n    \"current_month_usage\": 4800,\n    \"monthly_allowance\": 10000,\n    \"remaining_credits\": 5200\n  },\n  \"api_usage\": {\n    \"searches_this_hour\": 250,\n    \"hourly_rate_limit\": 200000\n  },\n  \"subscription\": {\n    \"period_start\": \"2024-12-04T00:34:59Z\",\n    \"period_end\": \"2025-01-04T00:34:59Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6528ee17-cab3-4daf-ad85-05df2a61483a",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "me"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "zero_retention",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Invalid API key.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b50014c3-d0ce-40e4-a580-0e4462710be1",
+      "name": "analytics",
+      "description": {
+        "content": "Aggregated performance and error analytics for the account's own searches.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e2154e57-b0a4-4f26-940a-d82586472bb5",
+          "name": "Get aggregated search analytics for the account",
+          "request": {
+            "name": "Get aggregated search analytics for the account",
+            "description": {
+              "content": "Retrieves and explores the account's search analytics: aggregate speed, total searches, success rate and errors, optionally broken down per engine and bucketed by day or hour over a chosen time period.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "search_analytics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "engine",
+                  "value": "<string>",
+                  "description": "Filter to one engine by name, or `all` for every engine."
+                },
+                {
+                  "disabled": false,
+                  "key": "bucket",
+                  "value": "<string>",
+                  "description": "Aggregation interval."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_period",
+                  "value": "<string>",
+                  "description": "Preset reporting window."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_period_min",
+                  "value": "<string>",
+                  "description": "Start date or datetime of the window. Defaults to one month ago."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_period_max",
+                  "value": "<string>",
+                  "description": "End date or datetime of the window. Defaults to today."
+                },
+                {
+                  "disabled": false,
+                  "key": "api_key",
+                  "value": "<string>",
+                  "description": "API key, if not supplied as an `Authorization: Bearer` header."
+                },
+                {
+                  "disabled": false,
+                  "key": "zero_retention",
+                  "value": "<boolean>",
+                  "description": "Enterprise-only. Disable logging and storage of the request."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e7ae0c67-be2d-4dc4-ad6d-8c6c313173be",
+              "name": "Analytics for the requested window.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "search_analytics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "engine",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "bucket",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_min",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_max",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "api_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "zero_retention",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"search_parameters\": {},\n  \"summary\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39641669-ea9b-4a1f-9a88-2674eda4c813",
+              "name": "Missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "search_analytics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "engine",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "bucket",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_min",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_max",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "api_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "zero_retention",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.searchapi.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2dca37b5-c89c-4849-9c5c-4943f7a078c0",
+    "name": "SearchApi Account & Analytics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The two account-management endpoints SearchApi documents alongside its SERP surface. `GET /api/v1/me` (the \"Account API\") returns the calling key's plan usage, remaining credits, current-hour search count and hourly rate limit. `GET /api/v1/search_analytics` (the \"Search Analytics API\") returns aggregated success rates, error rates and latency for the account's own searches, bucketed daily or hourly and optionally filtered to one engine.\n\nThese are the only SearchApi endpoints that expose runtime quota and reliability signal, and they are the reason an agent can self-regulate against SearchApi's hourly cap: SearchApi returns NO `X-RateLimit-*` or `RateLimit-*` response headers, so `api_usage.hourly_rate_limit` and `api_usage.searches_this_hour` from this API are the only machine-readable view of remaining headroom.\n\nThis description is GENERATED from the public documentation — SearchApi publishes no machine-readable OpenAPI. Only documented parameters and documented response fields are modeled. The `search_analytics` response is modeled to the depth the docs describe (`search_parameters`, `summary`, `performance_by_engine`, `buckets`) without inventing field names inside those objects that the documentation does not spell out.\n\nContact Support:\n Name: SearchApi Support\n Email: support@searchapi.io",
+      "type": "text/plain"
+    }
+  }
+}

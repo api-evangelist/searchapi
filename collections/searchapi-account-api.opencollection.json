@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SearchApi Account & Analytics API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "account",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get account usage, credits and hourly rate limit",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.searchapi.io/api/v1/me",
+            "params": [
+              {
+                "name": "api_key",
+                "value": "",
+                "type": "query",
+                "description": "API key. Optional here only because the same key may instead be sent as `Authorization: Bearer <API_KEY>`; one of the two is required."
+              },
+              {
+                "name": "zero_retention",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise-only. Set to `true` to disable logging and storage of the request for compliance purposes."
+              }
+            ]
+          },
+          "docs": "Returns the authenticated key's monthly allowance, month-to-date usage, remaining credits, searches made in the current hour, the hourly rate limit, and the current subscription period. Poll this to stay inside the documented cap of 20% of the plan's monthly credits per hour."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "analytics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get aggregated search analytics for the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.searchapi.io/api/v1/search_analytics",
+            "params": [
+              {
+                "name": "engine",
+                "value": "",
+                "type": "query",
+                "description": "Filter to one engine by name, or `all` for every engine."
+              },
+              {
+                "name": "bucket",
+                "value": "",
+                "type": "query",
+                "description": "Aggregation interval."
+              },
+              {
+                "name": "time_period",
+                "value": "",
+                "type": "query",
+                "description": "Preset reporting window."
+              },
+              {
+                "name": "time_period_min",
+                "value": "",
+                "type": "query",
+                "description": "Start date or datetime of the window. Defaults to one month ago."
+              },
+              {
+                "name": "time_period_max",
+                "value": "",
+                "type": "query",
+                "description": "End date or datetime of the window. Defaults to today."
+              },
+              {
+                "name": "api_key",
+                "value": "",
+                "type": "query",
+                "description": "API key, if not supplied as an `Authorization: Bearer` header."
+              },
+              {
+                "name": "zero_retention",
+                "value": "",
+                "type": "query",
+                "description": "Enterprise-only. Disable logging and storage of the request."
+              }
+            ]
+          },
+          "docs": "Retrieves and explores the account's search analytics: aggregate speed, total searches, success rate and errors, optionally broken down per engine and bucketed by day or hour over a chosen time period."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

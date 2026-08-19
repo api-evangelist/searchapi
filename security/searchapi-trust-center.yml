@@ -1,0 +1,73 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.searchapi.io/announcements
+trust_center:
+  url: https://security.searchapi.io/
+  status: 200
+  title: Trust center
+  discovered_via: >-
+    Linked from the site footer and named in the July 2026 changelog entry
+    (published 2026-08-06): "GDPR documentation sits alongside our ISO/IEC 27001:2022
+    certificate in our Trust Center."
+  machine_readable: false
+  note: >-
+    The trust center is a Vite single-page application. The HTML served to a non-JS client
+    is a 604-byte shell containing only `<title>Trust center</title>`; the certificate and
+    policy inventory is rendered client-side, and the SPA's catch-all answers HTTP 200
+    with that same shell for every path probed (including /.well-known/security.txt and
+    /.well-known/agent-card.json). The JS bundle exposes no fetchable JSON API. So the
+    trust center is REAL and it is the provider's own host, but its contents are not
+    machine-readable and the certifications below are sourced from SearchApi's own dated
+    announcements rather than from the trust center document itself.
+certifications:
+  - name: ISO/IEC 27001:2022
+    status: certified
+    announced: '2026-07-02'
+    source: https://www.searchapi.io/announcements
+    evidence: >-
+      "ISO/IEC 27001:2022 Certified — The certification covers our information security
+      management system, including how we manage infrastructure..." (June 2026 update,
+      published 2026-07-02). Certificate is stated to be available in the Trust Center.
+  - name: GDPR
+    status: compliant
+    announced: '2026-08-06'
+    source: https://www.searchapi.io/announcements
+    evidence: >-
+      "GDPR Compliant — Our data protection program covers how we collect, process, store,
+      and delete personal data, along with subprocessors..." (July 2026 update, published
+      2026-08-06). Documentation stated to sit in the Trust Center alongside the ISO
+      certificate.
+    dpa: https://www.searchapi.io/legal/dpa
+  - name: SOC 2
+    status: not-published
+    note: No SOC 2 report or Type I/II claim is published anywhere on the provider's surface.
+  - name: PCI DSS
+    status: not-applicable
+    note: SearchApi does not process cardholder data on behalf of customers.
+  - name: HIPAA
+    status: not-published
+  - name: FedRAMP
+    status: not-published
+data_handling:
+  zero_retention:
+    available: true
+    tier: enterprise
+    mechanism: '`zero_retention=true` request parameter on search, account and analytics endpoints'
+    description: Disables logging and storage of the request for compliance purposes.
+    source: https://www.searchapi.io/docs/account-api
+  dpa: https://www.searchapi.io/legal/dpa
+  privacy_policy: https://www.searchapi.io/legal/privacy
+  subprocessors:
+    published_url: null
+    note: >-
+      Subprocessor coverage is asserted in the GDPR announcement but no public
+      subprocessor list URL was found outside the JS-rendered trust center.
+gaps:
+  - No security.txt on any host (probed www.searchapi.io, searchapi.io, security.searchapi.io -> 404 / SPA shell).
+  - No published vulnerability disclosure policy or bug-bounty program (HackerOne/Bugcrowd/Intigriti all miss).
+  - Trust center contents are JS-rendered and not machine-readable.
+refs:
+  conformance: conformance/searchapi-conformance.yml
+  vulnerability_disclosure: null
+  domain_security: security/searchapi-domain-security.yml
+checked: '2026-08-13'

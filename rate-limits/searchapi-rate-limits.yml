@@ -1,0 +1,75 @@
+generated: '2026-08-13'
+method: searched
+source:
+  - https://www.searchapi.io/pricing
+  - https://www.searchapi.io/docs/account-api
+probe:
+  url: https://www.searchapi.io/api/v1/search?engine=google&q=test
+  status: 401
+  checked: '2026-08-13'
+  observed_headers:
+    - content-type
+    - x-content-type-options
+    - x-request-id
+  ratelimit_headers_present: false
+headline: >-
+  SearchApi enforces one published limit — an hourly cap of 20% of the plan's monthly
+  credits — and it signals that limit ONLY through a polled endpoint, never in a response
+  header. There are no `X-RateLimit-*`, no `RateLimit-*` (RFC 9331/draft) and no
+  `Retry-After` headers on any observed response. An agent cannot learn its remaining
+  headroom from the response it just received; it has to call GET /api/v1/me and read
+  `api_usage.searches_this_hour` against `api_usage.hourly_rate_limit`. That is the single
+  most consequential runtime-semantics gap in this provider's surface.
+limits:
+  - scope: per-account
+    window: 1 hour
+    limit: 20% of the plan's monthly credit allowance
+    burst: null
+    quoted: "you can utilize only up to 20% of your plan's credits each hour"
+    source: https://www.searchapi.io/pricing
+    applies_to: All plans, self-serve tiers included.
+    ref: plans/searchapi-plans-pricing.yml
+  - scope: per-account
+    window: 1 month
+    limit: The plan's included search volume (10,000 to 5,000,000 depending on tier)
+    burst: null
+    source: https://www.searchapi.io/pricing
+    note: >-
+      Billing is pay-per-success — only HTTP 200 responses consume a credit. One MCP tool
+      call consumes one credit.
+  - scope: per-account
+    window: n/a
+    limit: 10 MCP integrations per account
+    source: https://www.searchapi.io/integrations/mcp
+    applies_to: Hosted MCP server (https://www.searchapi.io/mcp)
+response_headers:
+  ratelimit: []
+  retry_after: false
+  note: >-
+    None published and none observed on live 401 or 200-class responses. The only
+    correlation header returned is `x-request-id` (a UUID), which is useful for support
+    but carries no quota information.
+runtime_signal:
+  endpoint: GET https://www.searchapi.io/api/v1/me
+  fields:
+    - api_usage.searches_this_hour
+    - api_usage.hourly_rate_limit
+    - account.remaining_credits
+    - account.monthly_allowance
+    - account.current_month_usage
+  method: polled
+  cost: >-
+    Not documented as consuming a search credit; it is an account endpoint, not a search.
+  ref: openapi/searchapi-account-api-openapi.yml
+exhaustion:
+  status_code: 429
+  documented: false
+  note: >-
+    A 429 response is modeled in the generated OpenAPI as the conventional exhaustion
+    status, but SearchApi does not publish an errors/rate-limit reference page and the
+    behaviour on exceeding the hourly cap — status code, body, whether a `Retry-After` is
+    returned — is not documented. This is recorded as a documentation gap, not as an
+    observed behaviour; it was not triggered, because doing so requires a paid key.
+  ref: errors/searchapi-problem-types.yml
+limit_count: 3
+checked: '2026-08-13'

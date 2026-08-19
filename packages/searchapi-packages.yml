@@ -1,40 +1,127 @@
-generated: '2026-07-23'
+generated: '2026-08-13'
 method: searched
-source: https://github.com/SearchApi
+source:
+  - https://github.com/SearchApi
+  - https://registry.npmjs.org/@searchapi/n8n-nodes-searchapi
+  - https://rubygems.org/api/v1/gems/wreq.json
+  - https://registry.modelcontextprotocol.io/v0/servers?search=searchapi
+  - https://www.postman.com/searchapiofficial/searchapi-official-postman-collection/
 note: >-
-  SearchApi is a raw-HTTP/JSON API and does not ship a traditional per-language
-  REST SDK — the docs instead publish copy-paste code samples in Python, Node,
-  Ruby, Java, Go, PHP, Bash, R, Kotlin, Swift, C#, C, and C++. The first-party
-  distributables below are integration/agent connectors published under the
-  SearchApi GitHub org, plus the official Postman collection. Because there is no
-  first-party REST client library, no `SDKs` pointer is emitted (that would
-  overstate the surface).
+  SearchApi ships NO first-party REST client library in any language. The docs publish
+  copy-paste samples in Python, Node, Ruby, Java, Go, PHP, Bash, R, Kotlin, Swift, C#, C
+  and C++, but there is no `searchapi` package on npm, PyPI, RubyGems, Maven Central,
+  NuGet, crates.io or pkg.go.dev that SearchApi publishes as an API client. What the
+  company does distribute are three integration/agent connectors plus one general-purpose
+  Ruby HTTP gem. Registry namespace hygiene is worth recording: npm `searchapi-mcp` and
+  PyPI `searchapi` both EXIST but belong to unrelated third parties (see
+  namespace_collisions), so a developer searching a registry by the company's name lands
+  on someone else's code.
+  Because no first-party REST SDK exists, no `SDKs` pointer is emitted — that would
+  overstate the surface.
+official_sdk_count: 0
+package_count: 4
 packages:
-  - kind: mcp-server
-    name: searchapi-mcp
-    registry: github
-    url: https://github.com/SearchApi/searchapi-mcp
-    install: git clone https://github.com/SearchApi/searchapi-mcp
-    official: true
-    description: SearchAPI MCP Server for AI assistants (first-party, SearchApi org).
   - kind: n8n-node
+    name: '@searchapi/n8n-nodes-searchapi'
     language: typescript
-    name: n8n-nodes-searchapi
-    registry: github
-    url: https://github.com/SearchApi/n8n-nodes-searchapi
+    registry: npm
+    url: https://www.npmjs.com/package/@searchapi/n8n-nodes-searchapi
+    repository: https://github.com/SearchApi/n8n-nodes-searchapi
+    version: 2.0.4
+    published: '2025-08-12'
     official: true
+    maintainer: searchapi_team <support@searchapi.io>
     description: >-
-      Community n8n node (published under the SearchApi org) for pulling
-      structured JSON from Google, Bing, YouTube, and other engines.
+      n8n community node for pulling structured JSON from Google, Bing, YouTube and other
+      SearchApi engines.
+    currency_note: >-
+      Latest npm release 2.0.4 is from 2025-08-12 — a year stale as of this pass — while
+      the backing GitHub repo was pushed 2026-07-31. Repo work is not reaching the
+      registry, so an n8n user installing from npm gets a build that predates roughly
+      fifteen monthly engine releases.
+  - kind: ruby-gem
+    name: wreq
+    language: ruby
+    registry: rubygems
+    url: https://rubygems.org/gems/wreq
+    repository: https://github.com/SearchApi/wreq-ruby
+    version: 1.2.11
+    published: '2026-08-06'
+    official: true
+    author: SearchApi
+    license: Apache-2.0
+    downloads: 12844
+    description: >-
+      Ruby HTTP client with browser fingerprinting that emulates Chrome, Edge, Firefox,
+      Safari, Opera and OkHttp TLS/HTTP2 signatures. Powered by wreq (Rust) and BoringSSL.
+    currency_note: >-
+      Current — released 2026-08-06, and the repo was pushed 2026-08-12. This is
+      infrastructure SearchApi built for its own scraping stack and open-sourced, not a
+      client for the SearchApi API; it is listed because it is the company's only
+      actively-maintained registry artifact.
   - kind: make-app
     name: searchapi-make-app
     registry: github
     url: https://github.com/SearchApi/searchapi-make-app
+    version: null
+    published: '2026-03-16'
     official: true
-    description: SearchApi app/connector for Make.com (first-party, SearchApi org).
+    description: SearchApi app/connector for Make.com.
+    currency_note: >-
+      version: null — distributed through the Make.com app directory, not a package
+      registry, so there is no metadata endpoint to query. `published` is the repository's
+      last push date, which is the only date available.
+  - kind: mcp-server
+    name: io.searchapi/mcp
+    registry: mcp
+    url: https://registry.modelcontextprotocol.io/v0/servers?search=searchapi
+    repository: https://github.com/SearchApi/searchapi-mcp
+    version: 1.0.0
+    published: '2026-01-29'
+    official: true
+    description: >-
+      Official Model Context Protocol registry listing (status active) for SearchApi's
+      hosted MCP server. The registry entry declares a `streamable-http` remote at
+      https://www.searchapi.io/mcp — there is no installable stdio package behind it.
+    currency_note: >-
+      Registry manifest v1.0.0, published 2026-01-29. Not an installable artifact; it is a
+      pointer to the hosted endpoint. See mcp/searchapi-mcp.yml deployment block.
+    ref: mcp/searchapi-mcp.yml
+collections:
   - kind: postman-collection
     name: SearchApi Official Postman Collection
     registry: postman
     url: https://www.postman.com/searchapiofficial/searchapi-official-postman-collection/
+    version: null
+    published: null
     official: true
-    description: First-party Postman workspace covering the SERP/search engines.
+    description: First-party Postman workspace covering the SERP engines.
+    currency_note: >-
+      version/published null — Postman public workspaces expose no unauthenticated
+      metadata endpoint carrying a version or publish date, so currency cannot be
+      established. Checked, nothing to record.
+namespace_collisions:
+  - registry: npm
+    name: searchapi-mcp
+    version: 1.0.0
+    published: '2025-06-02'
+    official: false
+    owner: lianshuang-photo <baotianyi0131@gmail.com>
+    repository: https://github.com/lianshuang-photo/searchapi-mcp-nodejs
+    note: >-
+      NOT SearchApi. A third-party Node MCP wrapper for searchapi.io, unmaintained since
+      2025-06-02. Recorded so a future pass does not mistake it for a first-party package.
+  - registry: pypi
+    name: searchapi
+    version: 0.1.0
+    official: false
+    owner: Agiliq Solutions (http://agiliq.com/)
+    note: >-
+      NOT SearchApi. An unrelated 2010s-era "api over a number of search engines" package
+      squatting the obvious PyPI name.
+language_samples:
+  note: >-
+    In place of SDKs, the docs render request samples per engine page.
+  languages: [python, nodejs, ruby, java, go, php, bash, r, kotlin, swift, csharp, c, cpp]
+  source: https://www.searchapi.io/docs/google
+checked: '2026-08-13'

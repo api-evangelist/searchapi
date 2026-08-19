@@ -1,0 +1,40 @@
+generated: '2026-08-13'
+method: generated
+source:
+  - openapi/searchapi-search-api-openapi.yml
+  - openapi/searchapi-account-api-openapi.yml
+  - conventions/searchapi-conventions.yml
+  - rate-limits/searchapi-rate-limits.yml
+  - errors/searchapi-problem-types.yml
+  - mcp/searchapi-mcp.yml
+note: >-
+  SearchApi publishes no AGENTS.md and no first-party skills — probed the site and the
+  GitHub org on 2026-08-13. These three are API Evangelist packaged skills, generated
+  against REAL operationIds (`search`, `getAccount`, `getSearchAnalytics`) and the runtime
+  semantics recorded elsewhere in this repo. No operation, parameter or error is invented.
+skills:
+  - name: searchapi-grounded-web-research
+    file: skills/searchapi-grounded-web-research.md
+    api: SearchApi SERP API
+    operations: [search, getAccount]
+    summary: >-
+      Ground an answer in live web results: pick the engine, authenticate on the header,
+      check headroom first, parse the engine-polymorphic envelope, and page without hitting
+      the 413/414 token-length wall.
+  - name: searchapi-quota-aware-batch
+    file: skills/searchapi-quota-aware-batch.md
+    api: SearchApi Account & Analytics API
+    operations: [getAccount, getSearchAnalytics, search]
+    summary: >-
+      Run a large batch inside the hourly credit cap by budgeting against GET /api/v1/me —
+      the only quota signal SearchApi emits — and audit the run per-engine afterwards.
+  - name: searchapi-mcp-agent-connect
+    file: skills/searchapi-mcp-agent-connect.md
+    api: SearchApi hosted MCP server
+    operations: [search]
+    summary: >-
+      Connect an MCP client over OAuth (PKCE, dynamic client registration, scope `mcp`),
+      scope the surface with a bundle, pick the right engine tool, and cover the blind spot
+      that no MCP tool exposes quota.
+skill_count: 3
+checked: '2026-08-13'

@@ -1,0 +1,169 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SearchApi SERP API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Run a search against a chosen engine",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.searchapi.io/api/v1/search",
+            "params": [
+              {
+                "name": "engine",
+                "value": "",
+                "type": "query",
+                "description": "Search engine to query. SearchApi supports 100+ engines. Common values include `google`, `google_maps`, `google_news`, `google_scholar`, `google_images`, `google_videos`, `google_shopping`, `google_trends`, `google_jobs`, `google_autocomplete`, `google_lens`, `google_ai_mode`, `bing`, `duckduckgo`, `yahoo`, `yandex`, `baidu`, `youtube`, `amazon_search`, `walmart_search`, `ebay_search`."
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search query. Supports engine search operators (e.g. `site:`, `inurl:`). For some engines this parameter carries the engine's primary input (e.g. a place query for `google_maps`)."
+              },
+              {
+                "name": "api_key",
+                "value": "",
+                "type": "query",
+                "description": "API key. Optional here because authentication is normally supplied via the `Authorization: Bearer <key>` header; provide it as a query parameter only if you are not using the header."
+              },
+              {
+                "name": "location",
+                "value": "",
+                "type": "query",
+                "description": "Geographic location from which the search is executed. Cannot be combined with `uule`."
+              },
+              {
+                "name": "uule",
+                "value": "",
+                "type": "query",
+                "description": "Google-encoded location string. Cannot be combined with `location`."
+              },
+              {
+                "name": "device",
+                "value": "",
+                "type": "query",
+                "description": "Device type to emulate."
+              },
+              {
+                "name": "gl",
+                "value": "",
+                "type": "query",
+                "description": "Two-letter country code for the results (e.g. `us`, `gb`)."
+              },
+              {
+                "name": "hl",
+                "value": "",
+                "type": "query",
+                "description": "Two-letter interface language code (e.g. `en`, `es`)."
+              },
+              {
+                "name": "lr",
+                "value": "",
+                "type": "query",
+                "description": "Restrict results to documents in a given language, in `lang_{code}` form (e.g. `lang_en`)."
+              },
+              {
+                "name": "cr",
+                "value": "",
+                "type": "query",
+                "description": "Restrict results to documents originating from a given country."
+              },
+              {
+                "name": "safe",
+                "value": "",
+                "type": "query",
+                "description": "SafeSearch filtering level."
+              },
+              {
+                "name": "nfpr",
+                "value": "",
+                "type": "query",
+                "description": "Set to `1` to exclude results from auto-corrected queries."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Set to `0` to disable the \"Similar/Omitted results\" duplicate filters."
+              },
+              {
+                "name": "verbatim",
+                "value": "",
+                "type": "query",
+                "description": "Force exact-keyword (verbatim) matching."
+              },
+              {
+                "name": "kgmid",
+                "value": "",
+                "type": "query",
+                "description": "Knowledge Graph entity id (`/m/` or `/g/` form) to fetch a specific entity."
+              },
+              {
+                "name": "time_period",
+                "value": "",
+                "type": "query",
+                "description": "Restrict results to a relative time window."
+              },
+              {
+                "name": "time_period_min",
+                "value": "",
+                "type": "query",
+                "description": "Custom time-window start date, `MM/DD/YYYY`."
+              },
+              {
+                "name": "time_period_max",
+                "value": "",
+                "type": "query",
+                "description": "Custom time-window end date, `MM/DD/YYYY`."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Results page number."
+              },
+              {
+                "name": "ll",
+                "value": "",
+                "type": "query",
+                "description": "GPS coordinates for engines that accept them (notably `google_maps`), in `@latitude,longitude,zoom` (e.g. `@40.7455096,-74.0083012,14z`) form."
+              },
+              {
+                "name": "optimization_strategy",
+                "value": "",
+                "type": "query",
+                "description": "Request optimization approach."
+              },
+              {
+                "name": "zero_retention",
+                "value": "",
+                "type": "query",
+                "description": "Disable logging/storage of the request and response (Enterprise plans only)."
+              }
+            ]
+          },
+          "docs": "Executes a real-time search on the engine named by `engine` and returns structured JSON. The set of accepted parameters and the populated response blocks depend on the selected engine; the parameters below are those common to the Google web-search engine (the reference engine). See the per-engine docs pages for engine-specific parameters (e.g. `ll` for `google_maps`)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

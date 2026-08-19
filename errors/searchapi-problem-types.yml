@@ -1,0 +1,85 @@
+generated: '2026-08-13'
+method: derived
+source:
+  - openapi/searchapi-search-api-openapi.yml
+  - openapi/searchapi-account-api-openapi.yml
+  - https://www.searchapi.io/docs/google
+  - live probe of https://www.searchapi.io/api/v1/search (2026-08-13)
+format: json
+rfc9457: false
+envelope:
+  content_type: application/json
+  shape:
+    error: string
+  example: '{"error": "Invalid API key."}'
+  note: >-
+    A single flat `error` string. No `type`, `title`, `status`, `detail` or `instance`
+    member, no `application/problem+json` media type, no machine-readable error code, and
+    no per-error documentation URI. There is no published error reference page on
+    searchapi.io — probing /docs/errors, /docs/rate-limits and /docs/api-usage all return
+    HTTP 404. Consumers must branch on HTTP status plus the prose of the `error` string,
+    which is the weakest error contract shape in common use.
+success_signal:
+  field: search_metadata.status
+  values_observed: ['Success']
+  note: >-
+    Search responses carry an in-body status under `search_metadata` in addition to the
+    HTTP status. Billing keys off HTTP 200 only: failed requests are not charged.
+correlation:
+  header: x-request-id
+  format: uuid
+  note: Returned on error responses as well as success; observed on a live 401.
+problem_types:
+  - status: 401
+    title: Invalid API key
+    body: '{"error": "Invalid API key."}'
+    method: probed
+    evidence: >-
+      GET https://www.searchapi.io/api/v1/search?engine=google&q=test with no credentials
+      returned HTTP 401 and this exact body on 2026-08-13. GET /api/v1/me returned the
+      same.
+    remediation: >-
+      Supply the key as `api_key=` or as `Authorization: Bearer <API_KEY>`. Not retryable.
+  - status: 400
+    title: Bad request
+    body: '{"error": "<message>"}'
+    method: derived
+    evidence: 400 response modeled on the `search` operation in the generated OpenAPI.
+    remediation: >-
+      Check required parameters (`engine`, `q`) and engine-specific constraints — e.g.
+      `uule` and `location` are mutually exclusive on the google engine.
+  - status: 413
+    title: Request Entity Too Large
+    method: searched
+    evidence: >-
+      Documented pagination failure mode: `next_page_token` grows across pages
+      (2KB -> 5KB -> 8KB+), and long tokens in a GET query string exceed request-size
+      limits.
+    remediation: >-
+      Switch to `POST /api/v1/search` and send the token (and the API key) in the JSON
+      body instead of the URL query string. POST support was added in January 2026.
+  - status: 414
+    title: URI Too Long
+    method: searched
+    evidence: Same pagination failure mode as 413 — URL length limits on long `next_page_token` values.
+    remediation: Use POST with a JSON body rather than a GET query string.
+  - status: 429
+    title: Rate limit / hourly credit cap exceeded
+    method: derived
+    evidence: >-
+      Modeled on the `search` operation in the generated OpenAPI as the conventional
+      exhaustion status. NOT observed and NOT documented — SearchApi publishes the hourly
+      cap rule (20% of monthly credits per hour) but never states the status code, body,
+      or whether a `Retry-After` is returned.
+    remediation: >-
+      Poll GET /api/v1/me and compare `api_usage.searches_this_hour` to
+      `api_usage.hourly_rate_limit` before retrying; no `Retry-After` is emitted.
+    confidence: low
+    ref: rate-limits/searchapi-rate-limits.yml
+gaps:
+  - No published error-code reference page (probed /docs/errors -> 404).
+  - No stable machine-readable error identifiers; only HTTP status plus a prose string.
+  - Rate-limit exhaustion behaviour undocumented.
+  - No `Retry-After` on any observed response.
+problem_type_count: 5
+checked: '2026-08-13'

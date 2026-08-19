@@ -1,0 +1,168 @@
+generated: '2026-08-13'
+method: derived
+source:
+  - mcp/searchapi-mcp.yml
+  - openapi/searchapi-search-api-openapi.yml
+  - openapi/searchapi-account-api-openapi.yml
+note: >-
+  SearchApi is the degenerate-but-instructive case for a tool crosswalk: the entire
+  SERP product is ONE REST operation, `search` on GET/POST /api/v1/search,
+  parameterized by `engine`. Every MCP tool therefore binds to that same operationId
+  and differs only in the value it pins into `engine` (plus per-engine extra
+  parameters). The tool inherits `search`'s parameters as its real input schema, with
+  `engine` bound rather than free. Confidence is `high` on the binding itself — the
+  provider's own docs describe each tool as the MCP face of the matching engine — and
+  the residual uncertainty is in the per-engine parameter tail, which is documented
+  per engine page and not in the single generated OpenAPI.
+  NO FABRICATION: the live MCP `tools/list` is OAuth-gated (HTTP 401), so tools are
+  mapped by published name and engine semantics, not by introspected inputSchema.
+surfaces:
+  openapi:
+    - file: openapi/searchapi-search-api-openapi.yml
+      operations: 1
+      gated: false
+      note: Generated from public docs; SearchApi publishes no machine-readable OpenAPI.
+    - file: openapi/searchapi-account-api-openapi.yml
+      operations: 2
+      gated: false
+  graphql:
+    endpoint: null
+    note: No GraphQL surface.
+  mcp:
+    url: https://www.searchapi.io/mcp
+    transport: streamable-http
+    gated: true
+    gate: OAuth bearer (scope `mcp`) or static X-MCP-Token header; anonymous tools/list returns 401.
+binding_model:
+  operation: search
+  bound_parameter: engine
+  note: >-
+    `rest: [search]` + `binding: engine=<value>` should be read as "call operationId
+    `search` with `engine` pinned to this value". Free parameters carried through from
+    the operation include q, location, uule, device, gl, hl, safe, time_period, page
+    and zero_retention.
+crosswalk:
+  - tool: google_search
+    category: web-search
+    rest: [search]
+    binding: engine=google
+    confidence: high
+  - tool: google_maps
+    category: local
+    rest: [search]
+    binding: engine=google_maps
+    confidence: high
+    note: Adds the `ll` latitude/longitude/zoom parameter documented on the google-maps engine page.
+  - tool: google_news
+    category: news
+    rest: [search]
+    binding: engine=google_news
+    confidence: high
+  - tool: google_scholar
+    category: academic
+    rest: [search]
+    binding: engine=google_scholar
+    confidence: high
+  - tool: google_shopping
+    category: commerce
+    rest: [search]
+    binding: engine=google_shopping
+    confidence: high
+  - tool: google_flights
+    category: travel
+    rest: [search]
+    binding: engine=google_flights
+    confidence: medium
+    note: Engine takes travel-specific parameters (origin, destination, dates) not modeled in the generated spec.
+  - tool: google_hotels
+    category: travel
+    rest: [search]
+    binding: engine=google_hotels
+    confidence: medium
+  - tool: google_jobs
+    category: jobs
+    rest: [search]
+    binding: engine=google_jobs
+    confidence: high
+  - tool: google_trends
+    category: market-intelligence
+    rest: [search]
+    binding: engine=google_trends
+    confidence: high
+  - tool: google_images
+    category: media
+    rest: [search]
+    binding: engine=google_images
+    confidence: high
+  - tool: google_patents
+    category: academic
+    rest: [search]
+    binding: engine=google_patents
+    confidence: high
+  - tool: youtube_search
+    category: media
+    rest: [search]
+    binding: engine=youtube
+    confidence: high
+  - tool: bing_search
+    category: web-search
+    rest: [search]
+    binding: engine=bing
+    confidence: high
+  - tool: amazon_search
+    category: commerce
+    rest: [search]
+    binding: engine=amazon
+    confidence: high
+  - tool: walmart_search
+    category: commerce
+    rest: [search]
+    binding: engine=walmart
+    confidence: high
+  - tool: ebay_search
+    category: commerce
+    rest: [search]
+    binding: engine=ebay
+    confidence: high
+  - tool: bestbuy_search
+    category: commerce
+    rest: [search]
+    binding: engine=bestbuy
+    confidence: high
+  - tool: apple_maps
+    category: local
+    rest: [search]
+    binding: engine=apple_maps
+    confidence: high
+  - tool: airbnb_search
+    category: travel
+    rest: [search]
+    binding: engine=airbnb
+    confidence: medium
+    note: Airbnb surface spans several documented engines (property, experiences, reviews, availability calendar).
+mcp_only: []
+rest_only:
+  - operation: getAccount
+    reason: >-
+      GET /api/v1/me (Account API) returns plan usage, remaining credits and the hourly
+      rate limit. No MCP tool exposes it, so an agent driving the MCP server cannot see
+      how much quota it has left or how close it is to the hourly cap — the one runtime
+      signal an autonomous consumer most needs.
+  - operation: getSearchAnalytics
+    reason: >-
+      GET /api/v1/search_analytics (Search Analytics API) returns per-engine success
+      rates, error rates and latency buckets. Not exposed as an MCP tool.
+coverage:
+  rest_operations: 3
+  rest_operations_bound: 1
+  mcp_tools_published: '80+ (advertised)'
+  mcp_tools_enumerated: 19
+  mcp_tools_bound: 19
+  mcp_only: 0
+  rest_only: 2
+  note: >-
+    19 of the advertised "80+" tools are publicly enumerable without authenticating;
+    all 19 bind cleanly. The remaining tools are additional `engine` values on the same
+    single operation, so the binding model covers them by construction even though the
+    names are gated.
+checked: '2026-08-13'

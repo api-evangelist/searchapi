@@ -1,19 +1,37 @@
 # SearchApi
 
-> SearchApi is a real-time SERP and search-data API that gives applications and AI agents structured JSON access to results from 100+ search engines — Google Search, Maps, News, Scholar, Images, Shopping, Trends, Jobs; YouTube, Bing, Baidu, Yandex, DuckDuckGo; and marketplaces like Amazon, Walmart, and eBay. It handles proxy rotation, CAPTCHA solving, and geographic/locale targeting server-side, and ships a hosted MCP server plus configurable tool "bundles" so agents can be handed a capability instead of a whole catalog.
+> SearchApi is a real-time SERP and search-data API that gives applications and AI agents structured JSON access to results from 100+ search engines — Google Search, Maps, News, Scholar, Images, Shopping, Trends, Jobs, Patents; YouTube, Bing, Baidu, Yandex, DuckDuckGo; marketplaces like Amazon, Walmart, eBay and BestBuy; travel surfaces like Google Flights, Google Hotels and Airbnb; and answer engines like ChatGPT, Gemini and Perplexity. It handles proxy rotation, CAPTCHA solving, and geographic/locale targeting server-side, and ships a hosted MCP server plus configurable tool "bundles" so agents can be handed a capability instead of a whole catalog.
+
+<!-- generated: 2026-08-13 | method: generated | source: apis.yml + repo artifacts.
+     SearchApi serves no llms.txt of its own — https://www.searchapi.io/llms.txt returns HTTP 404 (probed 2026-08-13). -->
 
 ## API
 - Base URL: https://www.searchapi.io/api/v1/search (single endpoint, parameterized by `engine`)
-- Methods: GET and POST
-- Auth: API key as `api_key` query param OR `Authorization: Bearer <API_KEY>` header
-- Required params: `engine`, `q`. Common: `location`, `gl`, `hl`, `device`, `page`, `time_period`, `safe`
-- Response: JSON with `search_metadata`, `search_parameters`, `search_information`, `organic_results`, plus engine-specific blocks (`ads`, `local_results`, `jobs`, `shopping_ads`, ...), and `pagination`
+- Methods: GET and POST. POST (added January 2026) takes the same parameters as a JSON body.
+- Auth: `Authorization: Bearer <API_KEY>` header (preferred) or `api_key` query param
+- Required params: `engine`, `q`. Common: `location`/`uule` (mutually exclusive), `gl`, `hl`, `device`, `page`, `time_period`, `safe`, `filter`, `verbatim`
+- Response: JSON with `search_metadata`, `search_parameters`, `search_information`, `organic_results`, `pagination`, plus engine-specific blocks (`answer_box`, `knowledge_graph`, `ads`, `local_results`, `shopping_ads`, `related_searches`, ...)
+- The response is polymorphic on the `engine` you requested and carries NO type tag in the body. Parse against the engine you asked for.
+- Account API: `GET /api/v1/me` — monthly allowance, current usage, remaining credits, `searches_this_hour`, `hourly_rate_limit`
+- Analytics API: `GET /api/v1/search_analytics` — per-engine success rate, error rate and latency buckets for your own traffic
+- Enterprise: `zero_retention=true` disables logging and storage of the request
+
+## Limits and errors
+- Hourly cap: up to 20% of the plan's monthly credits each hour
+- NO rate-limit response headers of any kind — no `X-RateLimit-*`, no `RateLimit-*`, no `Retry-After`. Headroom is visible only by polling `GET /api/v1/me`.
+- Billing is pay-per-success: only HTTP 200 consumes a credit. One MCP tool call = one credit.
+- Errors are a flat `{"error": "<message>"}` JSON body. Not RFC 9457 problem+json, no error codes, no published error reference page.
+- Deep pagination: `next_page_token` grows to 8KB+ and will produce HTTP 413 or 414 on a GET. Switch to POST with a JSON body.
+- Correlation: every response returns an `x-request-id` UUID header.
 
 ## Docs
 - Documentation & API reference: https://www.searchapi.io/docs/google
-- Pricing (pay-per-success, monthly quotas): https://www.searchapi.io/pricing
-- Changelog / announcements: https://www.searchapi.io/announcements
-- Status: https://status.searchapi.io/
+- Account API: https://www.searchapi.io/docs/account-api
+- Search Analytics API: https://www.searchapi.io/docs/search-analytics-api
+- Pricing (8 self-serve tiers, $40–$5,000/mo, 100 free requests on sign-up): https://www.searchapi.io/pricing
+- Changelog / announcements (monthly, dated): https://www.searchapi.io/announcements
+- Status (human-readable only; no JSON status API): https://status.searchapi.io/
+- Trust center: https://security.searchapi.io/
 - Postman collection: https://www.postman.com/searchapiofficial/searchapi-official-postman-collection/
 - Terms: https://www.searchapi.io/legal/terms
 - Privacy: https://www.searchapi.io/legal/privacy
@@ -21,19 +39,44 @@
 - GitHub: https://github.com/SearchApi
 
 ## Agents / MCP
-- Hosted MCP server: https://www.searchapi.io/mcp (HTTP transport; token via `?token=` or `X-MCP-Token`)
-- MCP integrations & bundles: https://www.searchapi.io/integrations/mcp
-- Setup: `claude mcp add searchapi "<YOUR_MCP_URL>" --transport http` (Claude Code); `npx mcp-remote "<YOUR_MCP_URL>"` (Claude Desktop)
+- Hosted MCP server: https://www.searchapi.io/mcp (streamable HTTP; remote only — there is no stdio package to install)
+- Listed in the official MCP registry as `io.searchapi/mcp`, status active
+- Auth: OAuth (recommended) with scope `mcp`, PKCE `S256`, dynamic client registration at https://www.searchapi.io/oauth/register — or a static `X-MCP-Token` header
+- Discovery: https://www.searchapi.io/.well-known/oauth-authorization-server and https://www.searchapi.io/.well-known/oauth-protected-resource
+- MCP integrations & bundles (max 10 integrations per account): https://www.searchapi.io/integrations/mcp
+- Setup: `claude mcp add --transport http searchapi https://www.searchapi.io/mcp`
+- 80+ tools; each is the single `search` operation with `engine` pinned to one value
+- Blind spot: no MCP tool exposes the Account API, so an agent on MCP alone cannot see its own remaining quota
 
 ## Compliance
-- ISO/IEC 27001:2022 certified; GDPR (DPA available); enterprise zero-retention option
+- ISO/IEC 27001:2022 certified (announced 2026-07-02)
+- GDPR compliant (announced 2026-08-06); DPA published; enterprise zero-retention option
+- No security.txt and no published vulnerability disclosure policy on any host
+
+## Not published
+- No machine-readable OpenAPI, Swagger or GraphQL contract (probed /openapi.json, /openapi.yaml, /swagger.json, /api-docs, /redoc — all 404)
+- No A2A agent card at /.well-known/agent-card.json or /.well-known/agent.json
+- No first-party REST SDK in any language; no webhooks, events or AsyncAPI; no CLI
+- No OpenID Connect configuration; the OAuth server serves the MCP endpoint only
 
 ## Repo artifacts (API Evangelist)
+- OpenAPI (generated from docs): openapi/searchapi-search-api-openapi.yml, openapi/searchapi-account-api-openapi.yml
+- Overlay: overlays/searchapi-search-api-overlay.yaml
 - Authentication: authentication/searchapi-authentication.yml
+- OAuth scopes (MCP): scopes/searchapi-scopes.yml
 - Conventions: conventions/searchapi-conventions.yml
-- MCP server: mcp/searchapi-mcp.yml
+- Errors: errors/searchapi-problem-types.yml
+- Rate limits: rate-limits/searchapi-rate-limits.yml
+- Plans & pricing: plans/searchapi-plans-pricing.yml
+- Data model: data-model/searchapi-data-model.yml
+- MCP server: mcp/searchapi-mcp.yml — registry manifest: mcp/searchapi-server.json
+- MCP tool crosswalk: mcp/searchapi-tool-crosswalk.yml
+- Agent skills: skills/_index.yml
 - Packages/connectors: packages/searchapi-packages.yml
+- Collections: collections/searchapi-search-api.postman_collection.json, collections/searchapi-search-api.opencollection.json
 - Changelog: changelog/searchapi-changelog.yml
 - Lifecycle: lifecycle/searchapi-lifecycle.yml
 - Conformance: conformance/searchapi-conformance.yml
+- Well-known probe: well-known/searchapi-well-known.yml
 - Domain security: security/searchapi-domain-security.yml
+- Trust center: security/searchapi-trust-center.yml

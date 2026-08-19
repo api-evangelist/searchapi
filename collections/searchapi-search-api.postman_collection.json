@@ -1,0 +1,747 @@
+{
+  "item": [
+    {
+      "id": "6dfab4fd-f87c-4a0d-b7b5-4fb8056ffe8e",
+      "name": "search",
+      "description": {
+        "content": "Real-time SERP / search-data retrieval across supported engines.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1573bc50-069d-40d1-9843-247a68170ad0",
+          "name": "Run a search against a chosen engine",
+          "request": {
+            "name": "Run a search against a chosen engine",
+            "description": {
+              "content": "Executes a real-time search on the engine named by `engine` and returns structured JSON. The set of accepted parameters and the populated response blocks depend on the selected engine; the parameters below are those common to the Google web-search engine (the reference engine). See the per-engine docs pages for engine-specific parameters (e.g. `ll` for `google_maps`).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "engine",
+                  "value": "<string>",
+                  "description": "(Required) Search engine to query. SearchApi supports 100+ engines. Common values include `google`, `google_maps`, `google_news`, `google_scholar`, `google_images`, `google_videos`, `google_shopping`, `google_trends`, `google_jobs`, `google_autocomplete`, `google_lens`, `google_ai_mode`, `bing`, `duckduckgo`, `yahoo`, `yandex`, `baidu`, `youtube`, `amazon_search`, `walmart_search`, `ebay_search`."
+                },
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "(Required) Search query. Supports engine search operators (e.g. `site:`, `inurl:`). For some engines this parameter carries the engine's primary input (e.g. a place query for `google_maps`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "api_key",
+                  "value": "<string>",
+                  "description": "API key. Optional here because authentication is normally supplied via the `Authorization: Bearer <key>` header; provide it as a query parameter only if you are not using the header."
+                },
+                {
+                  "disabled": false,
+                  "key": "location",
+                  "value": "<string>",
+                  "description": "Geographic location from which the search is executed. Cannot be combined with `uule`."
+                },
+                {
+                  "disabled": false,
+                  "key": "uule",
+                  "value": "<string>",
+                  "description": "Google-encoded location string. Cannot be combined with `location`."
+                },
+                {
+                  "disabled": false,
+                  "key": "device",
+                  "value": "desktop",
+                  "description": "Device type to emulate."
+                },
+                {
+                  "disabled": false,
+                  "key": "gl",
+                  "value": "us",
+                  "description": "Two-letter country code for the results (e.g. `us`, `gb`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "hl",
+                  "value": "en",
+                  "description": "Two-letter interface language code (e.g. `en`, `es`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "lr",
+                  "value": "<string>",
+                  "description": "Restrict results to documents in a given language, in `lang_{code}` form (e.g. `lang_en`)."
+                },
+                {
+                  "disabled": false,
+                  "key": "cr",
+                  "value": "<string>",
+                  "description": "Restrict results to documents originating from a given country."
+                },
+                {
+                  "disabled": false,
+                  "key": "safe",
+                  "value": "blur",
+                  "description": "SafeSearch filtering level."
+                },
+                {
+                  "disabled": false,
+                  "key": "nfpr",
+                  "value": "<integer>",
+                  "description": "Set to `1` to exclude results from auto-corrected queries."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<integer>",
+                  "description": "Set to `0` to disable the \"Similar/Omitted results\" duplicate filters."
+                },
+                {
+                  "disabled": false,
+                  "key": "verbatim",
+                  "value": "<boolean>",
+                  "description": "Force exact-keyword (verbatim) matching."
+                },
+                {
+                  "disabled": false,
+                  "key": "kgmid",
+                  "value": "<string>",
+                  "description": "Knowledge Graph entity id (`/m/` or `/g/` form) to fetch a specific entity."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_period",
+                  "value": "<string>",
+                  "description": "Restrict results to a relative time window."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_period_min",
+                  "value": "<string>",
+                  "description": "Custom time-window start date, `MM/DD/YYYY`."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_period_max",
+                  "value": "<string>",
+                  "description": "Custom time-window end date, `MM/DD/YYYY`."
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "Results page number."
+                },
+                {
+                  "disabled": false,
+                  "key": "ll",
+                  "value": "<string>",
+                  "description": "GPS coordinates for engines that accept them (notably `google_maps`), in `@latitude,longitude,zoom` (e.g. `@40.7455096,-74.0083012,14z`) form."
+                },
+                {
+                  "disabled": false,
+                  "key": "optimization_strategy",
+                  "value": "<string>",
+                  "description": "Request optimization approach."
+                },
+                {
+                  "disabled": false,
+                  "key": "zero_retention",
+                  "value": "<boolean>",
+                  "description": "Disable logging/storage of the request and response (Enterprise plans only)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fa032664-d693-426e-8f02-c81e0291abcc",
+              "name": "Structured search results. Populated blocks depend on the engine and query.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "engine",
+                      "value": "google"
+                    },
+                    {
+                      "key": "q",
+                      "value": "coffee"
+                    },
+                    {
+                      "key": "api_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "location",
+                      "value": "Austin, Texas, United States"
+                    },
+                    {
+                      "key": "uule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "device",
+                      "value": "desktop"
+                    },
+                    {
+                      "key": "gl",
+                      "value": "us"
+                    },
+                    {
+                      "key": "hl",
+                      "value": "en"
+                    },
+                    {
+                      "key": "lr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "safe",
+                      "value": "blur"
+                    },
+                    {
+                      "key": "nfpr",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "verbatim",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "kgmid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_min",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_max",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ll",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "optimization_strategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "zero_retention",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"search_metadata\": {\n    \"id\": \"string\",\n    \"status\": \"string\",\n    \"created_at\": \"2023-01-22T07:49:13.312Z\",\n    \"request_time_taken\": 581.5275804328035,\n    \"parsing_time_taken\": 7192.535211308719,\n    \"total_time_taken\": 7919.207592603289,\n    \"request_url\": \"string\",\n    \"html_url\": \"string\",\n    \"json_url\": \"string\"\n  },\n  \"search_parameters\": {\n    \"key_0\": false\n  },\n  \"search_information\": {\n    \"key_0\": true,\n    \"key_1\": 56\n  },\n  \"organic_results\": [\n    {\n      \"position\": 5395,\n      \"title\": \"string\",\n      \"link\": \"https://KfpLoUzlzEyavLVFOuzsZNwBGALCwe.hoecZOn\",\n      \"source\": \"string\",\n      \"domain\": \"string\",\n      \"displayed_link\": \"string\",\n      \"snippet\": \"string\",\n      \"snippet_highlighted_words\": [\n        \"string\",\n        \"string\"\n      ],\n      \"date\": \"string\",\n      \"thumbnail\": \"string\",\n      \"favicon\": \"string\",\n      \"sitelinks\": {\n        \"key_0\": true\n      }\n    },\n    {\n      \"position\": 5197,\n      \"title\": \"string\",\n      \"link\": \"http://ylGJ.wiuzyRNayDZ8JB.R9rYRXzqVbx9DSTTM9+XXT\",\n      \"source\": \"string\",\n      \"domain\": \"string\",\n      \"displayed_link\": \"string\",\n      \"snippet\": \"string\",\n      \"snippet_highlighted_words\": [\n        \"string\",\n        \"string\"\n      ],\n      \"date\": \"string\",\n      \"thumbnail\": \"string\",\n      \"favicon\": \"string\",\n      \"sitelinks\": {\n        \"key_0\": 7391.0269058233125,\n        \"key_1\": 6005.28234172337\n      }\n    }\n  ],\n  \"knowledge_graph\": {\n    \"key_0\": \"string\"\n  },\n  \"answer_box\": {\n    \"key_0\": 6544.101125431113,\n    \"key_1\": 3621\n  },\n  \"ai_overview\": {\n    \"key_0\": false,\n    \"key_1\": false\n  },\n  \"related_searches\": [\n    {\n      \"key_0\": 8293,\n      \"key_1\": false,\n      \"key_2\": 3591\n    },\n    {\n      \"key_0\": true\n    }\n  ],\n  \"related_questions\": [\n    {\n      \"key_0\": 6478.6761004958225\n    },\n    {\n      \"key_0\": \"string\"\n    }\n  ],\n  \"pagination\": {\n    \"current\": 2642,\n    \"next\": \"http://DAIwJLFTWdrXQtOYDgJNpKNB.tkbEU3MRE58.xcoysxLD\",\n    \"other_pages\": {\n      \"key_0\": \"string\"\n    }\n  },\n  \"key_0\": false,\n  \"key_1\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1e75f0c-2d01-4044-83ca-aa39c07b457a",
+              "name": "Bad request — a required parameter is missing or a value is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "engine",
+                      "value": "google"
+                    },
+                    {
+                      "key": "q",
+                      "value": "coffee"
+                    },
+                    {
+                      "key": "api_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "location",
+                      "value": "Austin, Texas, United States"
+                    },
+                    {
+                      "key": "uule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "device",
+                      "value": "desktop"
+                    },
+                    {
+                      "key": "gl",
+                      "value": "us"
+                    },
+                    {
+                      "key": "hl",
+                      "value": "en"
+                    },
+                    {
+                      "key": "lr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "safe",
+                      "value": "blur"
+                    },
+                    {
+                      "key": "nfpr",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "verbatim",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "kgmid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_min",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_max",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ll",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "optimization_strategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "zero_retention",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0ea724d-77d1-45d7-91d6-781d92831f2b",
+              "name": "Unauthorized — missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "engine",
+                      "value": "google"
+                    },
+                    {
+                      "key": "q",
+                      "value": "coffee"
+                    },
+                    {
+                      "key": "api_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "location",
+                      "value": "Austin, Texas, United States"
+                    },
+                    {
+                      "key": "uule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "device",
+                      "value": "desktop"
+                    },
+                    {
+                      "key": "gl",
+                      "value": "us"
+                    },
+                    {
+                      "key": "hl",
+                      "value": "en"
+                    },
+                    {
+                      "key": "lr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "safe",
+                      "value": "blur"
+                    },
+                    {
+                      "key": "nfpr",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "verbatim",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "kgmid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_min",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_max",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ll",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "optimization_strategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "zero_retention",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2538c41f-2b53-4873-85dd-1e37d0d9e216",
+              "name": "Too many requests — account rate/throughput limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "engine",
+                      "value": "google"
+                    },
+                    {
+                      "key": "q",
+                      "value": "coffee"
+                    },
+                    {
+                      "key": "api_key",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "location",
+                      "value": "Austin, Texas, United States"
+                    },
+                    {
+                      "key": "uule",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "device",
+                      "value": "desktop"
+                    },
+                    {
+                      "key": "gl",
+                      "value": "us"
+                    },
+                    {
+                      "key": "hl",
+                      "value": "en"
+                    },
+                    {
+                      "key": "lr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cr",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "safe",
+                      "value": "blur"
+                    },
+                    {
+                      "key": "nfpr",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "verbatim",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "kgmid",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_min",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "time_period_max",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "ll",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "optimization_strategy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "zero_retention",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.searchapi.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ffa03802-e28a-493f-9e8d-9535429ce4f8",
+    "name": "SearchApi SERP API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Real-time SERP and search-data API. A single GET endpoint, `/api/v1/search`, returns clean, structured JSON results across 100+ search engines selected via the `engine` parameter (Google, Google Maps, Google News, Google Scholar, Google Images, Google Shopping, Google Trends, Google Jobs, YouTube, Bing, Baidu, DuckDuckGo, Yahoo, Yandex, and marketplace engines such as Amazon, Walmart, and eBay). SearchApi handles proxy rotation, CAPTCHA solving, and geo/locale targeting server-side. Authenticate with an API key, sent either as an `Authorization: Bearer <key>` header or an `api_key` query parameter.\nThis description is GENERATED from the public documentation at https://www.searchapi.io/docs — SearchApi does not publish a machine-readable OpenAPI/GraphQL contract. Parameters and the response envelope are grounded in the documented Google and Google Maps engines; per-engine parameter sets and response blocks vary. No fabrication: only documented fields are included, and engine-specific fields are noted as such.\n\nContact Support:\n Name: SearchApi Support\n Email: support@searchapi.io",
+      "type": "text/plain"
+    }
+  }
+}

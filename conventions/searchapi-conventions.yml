@@ -1,12 +1,33 @@
-generated: '2026-07-23'
+generated: '2026-08-13'
 method: searched
-source: https://www.searchapi.io/docs/google
+source:
+  - https://www.searchapi.io/docs/google
+  - https://www.searchapi.io/docs/account-api
+  - https://www.searchapi.io/docs/search-analytics-api
+  - https://www.searchapi.io/integrations/mcp
+  - live probes of https://www.searchapi.io/api/v1/search (2026-08-13)
 authentication:
   style: api-key
   transport: [query:api_key, header:Authorization-Bearer]
+  preferred: header:Authorization-Bearer
   ref: authentication/searchapi-authentication.yml
+  oauth:
+    surface: mcp-only
+    note: >-
+      The REST API is API-key only. SearchApi does run an OAuth 2.1-style authorization
+      server (authorization_code + refresh_token, PKCE S256, dynamic client registration
+      at /oauth/register, RFC 8414 + RFC 9728 metadata documents), but its only protected
+      resource is the hosted MCP endpoint, under a single scope `mcp`.
+    ref: scopes/searchapi-scopes.yml
 request:
   base_url: https://www.searchapi.io/api/v1/search
+  other_endpoints:
+    - path: /api/v1/me
+      purpose: Account usage, remaining credits, hourly rate-limit headroom.
+      ref: openapi/searchapi-account-api-openapi.yml
+    - path: /api/v1/search_analytics
+      purpose: Aggregated success rate, error rate and latency by engine and time bucket.
+      ref: openapi/searchapi-account-api-openapi.yml
   methods: [GET, POST]
   post_support: 'HTTP POST supported (added January 2026) as an alternative to GET.'
   required_params: [engine, q]
@@ -23,15 +44,31 @@ pagination:
   style: page-number
   params: [page]
   response_field: pagination
+  cursor_field: next_page_token
   note: >-
     Responses include a `pagination` object (`current`, `next`). Google web
     results are fixed at 10 per page since Google phased out `num` in Sep 2025;
     the `page` parameter walks result pages.
+  failure_mode: >-
+    `next_page_token` grows with pagination depth (2KB -> 5KB -> 8KB+). Carried in a GET
+    query string it eventually exceeds request-size/URI limits and returns HTTP 413 or
+    414. The documented remedy is to switch to POST /api/v1/search and send the token
+    (and the key) in the JSON body. Any consumer paging more than a page or two deep
+    should start on POST.
+  ref: errors/searchapi-problem-types.yml
 localization:
   params: [location, gl, hl, device, google_domain, time_period, safe]
   note: Geographic and locale targeting handled server-side (proxy rotation + geo).
 response_envelope:
   format: json
+  polymorphism:
+    discriminator: engine
+    in_body_type_tag: false
+    note: >-
+      Which blocks appear, and their internal shape, is determined by the `engine`
+      requested — not by any field inside the payload. Parse against the engine you asked
+      for; the body carries no type tag.
+    ref: data-model/searchapi-data-model.yml
   top_level_fields:
     - search_metadata      # id, status, request_url, timings
     - search_parameters    # echo of inputs
@@ -43,20 +80,53 @@ response_envelope:
   status_field: search_metadata.status   # e.g. "Success"
 request_tracing:
   request_id_field: search_metadata.id
-  note: Each response carries a request id under `search_metadata`.
+  request_id_header: x-request-id
+  note: >-
+    Success bodies carry a request id under `search_metadata.id`. Independently, every
+    response — including errors — returns an `x-request-id` UUID header (observed on a
+    live 401 on 2026-08-13). That header is the only correlation handle available on a
+    failure, since error bodies carry no id.
 versioning:
   scheme: uri-path
   current: v1
   ref: lifecycle/searchapi-lifecycle.yml
 errors:
+  envelope: '{"error": "<message>"}'
+  content_type: application/json
+  rfc9457: false
+  error_codes: false
+  reference_page: null
   note: >-
-    Errors are returned as JSON with an `error` message; standard HTTP status
-    codes apply (401 unauthorized observed on protected endpoints). No RFC 9457
-    problem+json envelope is documented.
+    A flat `error` string with no code, no type URI and no problem+json media type.
+    SearchApi publishes no error reference page — /docs/errors, /docs/rate-limits and
+    /docs/api-usage all return HTTP 404. Consumers must branch on HTTP status plus the
+    prose of the message. Observed live: 401 -> {"error": "Invalid API key."}.
+  ref: errors/searchapi-problem-types.yml
 rate_limits:
   model: plan-quota
+  hourly_cap: 20% of the plan's monthly credits per hour
+  response_headers: []
+  retry_after: false
+  runtime_signal: GET /api/v1/me -> api_usage.searches_this_hour vs api_usage.hourly_rate_limit
   note: >-
-    Billing is per successful search against a monthly plan quota
-    (pay-per-success; failed requests are not charged). No per-second rate-limit
-    header contract is documented; concurrency scales with plan tier.
-  ref: https://www.searchapi.io/pricing
+    Billing is pay-per-success: only HTTP 200 consumes a credit, failed requests are not
+    charged, and one MCP tool call equals one search. The one published limit is the
+    hourly cap. Critically, SearchApi emits NO rate-limit headers at all — no
+    X-RateLimit-*, no RateLimit-*, no Retry-After — so remaining headroom is visible only
+    by polling the Account API. That is the sharpest runtime-semantics gap in this
+    provider's surface.
+  ref: rate-limits/searchapi-rate-limits.yml
+  pricing: https://www.searchapi.io/pricing
+mcp:
+  endpoint: https://www.searchapi.io/mcp
+  transport: streamable-http
+  auth: [oauth (scope `mcp`), 'X-MCP-Token header']
+  billing: One tool call = one search credit.
+  integrations_per_account: 10
+  ref: mcp/searchapi-mcp.yml
+compliance_flag:
+  param: zero_retention
+  availability: enterprise
+  effect: Disables logging and storage of the request. Accepted on search, account and analytics endpoints.
+  ref: security/searchapi-trust-center.yml
+checked: '2026-08-13'

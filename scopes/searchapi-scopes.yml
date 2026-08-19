@@ -1,0 +1,54 @@
+generated: '2026-08-13'
+method: probed
+source: https://www.searchapi.io/.well-known/oauth-authorization-server
+docs: https://www.searchapi.io/integrations/mcp
+note: >-
+  SearchApi's REST SERP API has no OAuth surface at all — it authenticates with a
+  single API key (query `api_key` or `Authorization: Bearer`). The OAuth surface
+  described here belongs exclusively to the hosted MCP server at
+  https://www.searchapi.io/mcp, which SearchApi added alongside the legacy static
+  `X-MCP-Token` header. The authorization server publishes exactly one scope.
+  Scopes were read from the live RFC 8414 metadata document, not derived from a
+  spec — `derive-oauth-scopes.py` finds no oauth2 securityScheme because the
+  OpenAPI describes only the API-key REST surface.
+authorization_server:
+  issuer: https://www.searchapi.io
+  metadata: https://www.searchapi.io/.well-known/oauth-authorization-server
+  authorization_endpoint: https://www.searchapi.io/oauth/authorize
+  token_endpoint: https://www.searchapi.io/oauth/token
+  revocation_endpoint: https://www.searchapi.io/oauth/revoke
+  registration_endpoint: https://www.searchapi.io/oauth/register
+  grant_types_supported:
+    - authorization_code
+    - refresh_token
+  response_types_supported:
+    - code
+  code_challenge_methods_supported:
+    - S256
+  token_endpoint_auth_methods_supported:
+    - none
+  dynamic_client_registration: true
+  client_id_metadata_document_supported: true
+  authorization_response_iss_parameter_supported: true
+protected_resources:
+  - resource: https://www.searchapi.io/mcp
+    metadata: https://www.searchapi.io/.well-known/oauth-protected-resource
+    authorization_servers:
+      - https://www.searchapi.io
+    bearer_methods_supported:
+      - header
+    www_authenticate_observed: >-
+      Bearer resource_metadata="https://www.searchapi.io/.well-known/oauth-protected-resource/mcp",
+      scope="mcp"
+scopes:
+  - name: mcp
+    description: >-
+      Grants an OAuth client access to the SearchApi hosted MCP server, and through it
+      to the search tools bound to the authorizing account's MCP integration. There is
+      no finer-grained scope: the single `mcp` scope carries the whole tool surface,
+      and per-tool scoping is done out-of-band by choosing which tools go into a
+      dashboard "bundle" rather than by OAuth scope.
+    resource: https://www.searchapi.io/mcp
+    source: https://www.searchapi.io/.well-known/oauth-authorization-server
+scope_count: 1
+checked: '2026-08-13'

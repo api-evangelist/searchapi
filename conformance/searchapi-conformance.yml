@@ -1,30 +1,124 @@
-generated: '2026-07-23'
+generated: '2026-08-13'
 method: searched
-source: https://www.searchapi.io/announcements
+source:
+  - https://www.searchapi.io/announcements
+  - https://www.searchapi.io/.well-known/oauth-authorization-server
+  - https://www.searchapi.io/.well-known/oauth-protected-resource
+  - https://www.searchapi.io/integrations/mcp
+  - https://registry.modelcontextprotocol.io/v0/servers?search=searchapi
+note: >-
+  SearchApi's conformance profile is lopsided by design: the REST SERP surface conforms to
+  almost no cross-cutting API standard (API key only, flat JSON errors, no problem+json, no
+  rate-limit headers), while the MCP surface added in 2026 conforms to a genuinely current
+  stack — MCP with streamable HTTP, OAuth 2.1-style authorization code + PKCE S256, RFC 8414
+  authorization server metadata, RFC 9728 protected resource metadata, and RFC 7591 dynamic
+  client registration. The agent-facing half of this provider is materially better
+  standardized than the developer-facing half.
 standards:
   - id: iso-27001-2022
     conforms: true
     evidence: >-
       ISO/IEC 27001:2022 certification announced in the June 2026 update
-      (https://www.searchapi.io/announcements).
+      (https://www.searchapi.io/announcements, published 2026-07-02); certificate stated to
+      be held in the trust center at https://security.searchapi.io/.
   - id: gdpr
     conforms: true
     evidence: >-
-      Data Processing Agreement published at https://www.searchapi.io/legal/dpa;
-      zero-retention (no-logging) request option available on enterprise plans.
+      GDPR compliance announced in the July 2026 update (published 2026-08-06); Data
+      Processing Agreement published at https://www.searchapi.io/legal/dpa; zero-retention
+      (no-logging) request option available on enterprise plans via `zero_retention=true`.
+  - id: mcp
+    conforms: true
+    evidence: >-
+      Hosted MCP server at https://www.searchapi.io/mcp, streamable-HTTP transport, listed
+      active in the official MCP registry as `io.searchapi/mcp` since 2026-01-29 against
+      server schema 2025-12-11. Live tools/list is auth-gated (401).
+    ref: mcp/searchapi-mcp.yml
   - id: oauth2
-    conforms: false
-    evidence: API-key auth only; no OAuth2 flows.
+    conforms: true
+    scope: MCP surface only
+    evidence: >-
+      Authorization code + refresh token grants with PKCE S256, published at
+      https://www.searchapi.io/.well-known/oauth-authorization-server. The REST SERP API
+      has no OAuth surface — it is API-key only.
+    ref: scopes/searchapi-scopes.yml
+  - id: rfc8414-authorization-server-metadata
+    conforms: true
+    evidence: 'HTTP 200 JSON at /.well-known/oauth-authorization-server (probed 2026-08-13).'
+  - id: rfc9728-protected-resource-metadata
+    conforms: true
+    evidence: >-
+      HTTP 200 JSON at /.well-known/oauth-protected-resource and at the resource-specific
+      /.well-known/oauth-protected-resource/mcp, advertised in the WWW-Authenticate header
+      of an anonymous 401 from /mcp (probed 2026-08-13).
+  - id: rfc7591-dynamic-client-registration
+    conforms: true
+    evidence: '`registration_endpoint: https://www.searchapi.io/oauth/register` with `token_endpoint_auth_methods_supported: ["none"]` — public clients can self-register.'
+  - id: rfc7636-pkce
+    conforms: true
+    evidence: '`code_challenge_methods_supported: ["S256"]`.'
   - id: openidconnect
     conforms: false
+    evidence: 'No /.well-known/openid-configuration (probed 2026-08-13 -> HTTP 404). The OAuth server issues access tokens for MCP, not identity tokens.'
   - id: rfc9457-problem-details
     conforms: false
-    evidence: Errors returned as plain JSON `error` messages, not application/problem+json.
+    evidence: >-
+      Errors are a flat `{"error": "<message>"}` JSON body with `content-type:
+      application/json`, not `application/problem+json`. Observed on a live 401.
+    ref: errors/searchapi-problem-types.yml
+  - id: rfc6749-ratelimit-headers
+    conforms: false
+    evidence: >-
+      No X-RateLimit-*, RateLimit-* or Retry-After headers on any observed response; the
+      hourly cap is only visible by polling GET /api/v1/me.
+    ref: rate-limits/searchapi-rate-limits.yml
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Sunset/Deprecation headers and no published deprecation policy.
+    ref: lifecycle/searchapi-lifecycle.yml
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: 'No security.txt served on www.searchapi.io, searchapi.io or security.searchapi.io (probed 2026-08-13).'
+  - id: idempotency
+    conforms: false
+    evidence: >-
+      No Idempotency-Key mechanism. Not a defect for this shape of API — every operation is
+      a read — but recorded so no Idempotency pointer is emitted.
+  - id: pagination
+    conforms: true
+    evidence: >-
+      Page-number pagination via `page` plus a `pagination` response object
+      (`current`, `next`) and a `next_page_token` cursor on deeper surfaces.
+    ref: conventions/searchapi-conventions.yml
   - id: json-api
     conforms: false
+  - id: odata
+    conforms: false
+  - id: scim
+    conforms: false
+  - id: openapi
+    conforms: false
+    evidence: >-
+      SearchApi publishes no machine-readable OpenAPI. Probed /openapi.json, /openapi.yaml,
+      /swagger.json, /v1/openapi.json, /api-docs and /redoc on www.searchapi.io — all HTTP
+      404 (2026-08-13). The specs in openapi/ are API Evangelist reconstructions from the
+      public docs and are marked `method: generated`.
+  - id: asyncapi
+    conforms: false
+    evidence: >-
+      No event, streaming, webhook or callback surface exists to describe. N/A rather than
+      a failure.
+  - id: a2a
+    conforms: false
+    evidence: >-
+      No agent card at /.well-known/agent-card.json or /.well-known/agent.json on any host
+      (probed 2026-08-13).
 compliance:
   certifications:
     - ISO/IEC 27001:2022
     - GDPR (DPA)
+  trust_center: https://security.searchapi.io/
   data_processing_agreement: https://www.searchapi.io/legal/dpa
   zero_retention_option: true
+  ref: security/searchapi-trust-center.yml
+checked: '2026-08-13'

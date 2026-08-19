@@ -1,0 +1,104 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the SearchApi SERP API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-13'
+  method: generated
+  source: openapi/searchapi-search-api-openapi.yml
+  note: >-
+    Extends (never mutates) openapi/searchapi-search-api-openapi.yml with the
+    runtime-semantics facts established elsewhere in this repo — auth transports, the
+    hourly credit cap and its polled-only signal, the flat non-RFC-9457 error envelope,
+    the 413/414 pagination failure mode and its POST remedy, the correlation header, and
+    the engine-to-MCP-tool binding. Every added value is traceable to a probed response or
+    a published docs page; nothing here invents API behaviour.
+extends: openapi/searchapi-search-api-openapi.yml
+actions:
+  - target: $.info
+    description: Record provider-level agent-facing facts on the spec root.
+    update:
+      x-provider: SearchApi
+      x-apis-json: https://raw.githubusercontent.com/api-evangelist/searchapi/refs/heads/main/apis.yml
+      x-trust-center: https://security.searchapi.io/
+      x-status-page: https://status.searchapi.io/
+      x-changelog: https://www.searchapi.io/announcements
+      x-mcp-server: https://www.searchapi.io/mcp
+      x-machine-readable-spec-published: false
+  - target: $
+    description: >-
+      Declare the POST alternative to the documented server entry. SearchApi added HTTP
+      POST support in January 2026; it is the required transport once `next_page_token`
+      grows past URL length limits.
+    update:
+      x-post-supported: true
+      x-post-note: >-
+        POST /api/v1/search accepts the same parameters as a JSON body. Required when a
+        long `next_page_token` would otherwise produce HTTP 413 or 414 on a GET.
+  - target: $.paths['/api/v1/search'].get
+    description: Attach rate-limit, error and billing semantics to the single search operation.
+    update:
+      x-rate-limit:
+        scope: per-account
+        window: 1 hour
+        limit: 20% of the plan's monthly credit allowance
+        response_headers: []
+        retry_after: false
+        runtime_signal: GET /api/v1/me -> api_usage.searches_this_hour vs api_usage.hourly_rate_limit
+        ref: rate-limits/searchapi-rate-limits.yml
+      x-billing:
+        model: pay-per-success
+        note: Only HTTP 200 responses consume a credit; failed requests are not charged.
+      x-error-envelope:
+        format: json
+        rfc9457: false
+        shape: '{"error": "<message>"}'
+        ref: errors/searchapi-problem-types.yml
+      x-correlation-header: x-request-id
+      x-idempotency:
+        supported: false
+        reason: Read-only query operation; no state is created.
+  - target: $.paths['/api/v1/search'].get.parameters[?(@.name=='engine')]
+    description: >-
+      Bind the `engine` parameter to the MCP tool surface. Each hosted MCP tool is this
+      operation with `engine` pinned to one value.
+    update:
+      x-mcp-binding:
+        crosswalk: mcp/searchapi-tool-crosswalk.yml
+        model: one MCP tool per engine value
+        server: https://www.searchapi.io/mcp
+      x-open-enum: true
+      x-enum-note: >-
+        100+ documented engine values; the docs page per engine is authoritative for that
+        engine's extra parameters.
+  - target: $.paths['/api/v1/search'].get.parameters[?(@.name=='page')]
+    description: Record the cursor failure mode that the docs describe but the spec cannot express.
+    update:
+      x-pagination:
+        style: page-number
+        response_field: pagination
+        cursor_field: next_page_token
+        failure_mode: >-
+          `next_page_token` grows across pages (2KB -> 5KB -> 8KB+); on a GET this
+          eventually returns HTTP 413 or 414. Switch to POST with a JSON body.
+  - target: $.paths['/api/v1/search'].get.parameters[?(@.name=='zero_retention')]
+    description: Flag the compliance-tier gate on this parameter.
+    update:
+      x-availability: enterprise-only
+      x-compliance-ref: security/searchapi-trust-center.yml
+  - target: $.paths['/api/v1/search'].get.responses['429']
+    description: Mark the 429 as modeled-not-observed so downstream consumers do not over-trust it.
+    update:
+      x-confidence: low
+      x-evidence: >-
+        Not documented by the provider and not observed. SearchApi publishes the hourly cap
+        rule but never states the exhaustion status code, body, or whether Retry-After is
+        returned.
+  - target: $.components.securitySchemes
+    description: Note that the OAuth surface exists but does not cover this API.
+    update:
+      x-oauth-note: >-
+        SearchApi runs an OAuth 2.1-style authorization server
+        (/.well-known/oauth-authorization-server, PKCE S256, dynamic client registration)
+        but its only protected resource is the MCP endpoint, scope `mcp`. The REST SERP API
+        remains API-key only. See scopes/searchapi-scopes.yml.

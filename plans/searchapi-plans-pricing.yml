@@ -1,0 +1,113 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.searchapi.io/pricing
+currency: USD
+model: >-
+  Prepaid monthly search credits. Billing is pay-per-success: only searches returning
+  HTTP 200 are charged, failed requests are not. One MCP tool call counts as one search.
+  Price per 1,000 searches falls as the committed monthly volume rises; all published
+  tiers are self-serve and share the same feature set and the same hourly cap policy.
+free_trial:
+  requests: 100
+  note: 100 free requests on sign-up. No credit card tier is published beyond the trial.
+  source: https://www.searchapi.io/pricing
+plans:
+  - name: Developer
+    price: 40
+    currency: USD
+    period: month
+    included_searches: 10000
+    unit_price_per_1000: 4.0
+    limits:
+      hourly_credit_cap_pct: 20
+      hourly_searches: 2000
+    note: 'Published rate-limit rule: "you can utilize only up to 20% of your plan''s credits each hour".'
+  - name: Production
+    price: 100
+    currency: USD
+    period: month
+    included_searches: 35000
+    unit_price_per_1000: 3.0
+    limits:
+      hourly_credit_cap_pct: 20
+      hourly_searches: 7000
+  - name: BigData
+    price: 250
+    currency: USD
+    period: month
+    included_searches: 100000
+    unit_price_per_1000: 2.5
+    limits:
+      hourly_credit_cap_pct: 20
+      hourly_searches: 20000
+  - name: Scale
+    price: 500
+    currency: USD
+    period: month
+    included_searches: 250000
+    unit_price_per_1000: 2.0
+    limits:
+      hourly_credit_cap_pct: 20
+      hourly_searches: 50000
+  - name: Octo 500K
+    price: 900
+    currency: USD
+    period: month
+    included_searches: 500000
+    unit_price_per_1000: 1.8
+    limits:
+      hourly_credit_cap_pct: 20
+      hourly_searches: 100000
+  - name: Octo 1M
+    price: 1500
+    currency: USD
+    period: month
+    included_searches: 1000000
+    unit_price_per_1000: 1.5
+    limits:
+      hourly_credit_cap_pct: 20
+      hourly_searches: 200000
+  - name: Octo 2M
+    price: 2800
+    currency: USD
+    period: month
+    included_searches: 2000000
+    unit_price_per_1000: 1.4
+    limits:
+      hourly_credit_cap_pct: 20
+      hourly_searches: 400000
+  - name: Octo 5M
+    price: 5000
+    currency: USD
+    period: month
+    included_searches: 5000000
+    unit_price_per_1000: 1.0
+    limits:
+      hourly_credit_cap_pct: 20
+      hourly_searches: 1000000
+plan_count: 8
+overage:
+  published: false
+  note: >-
+    No separate overage rate is published. The per-1,000 price attached to each tier is
+    the effective rate; growth past a tier's included volume is handled by moving to the
+    next tier rather than by a documented overage charge.
+enterprise:
+  contact_only: true
+  note: >-
+    Volumes above 5M searches/month, zero-retention (no-logging) request handling, and
+    uptime commitments are handled through sales rather than a published plan. The
+    `zero_retention` request parameter is documented as Enterprise-only.
+derived_fields:
+  hourly_searches:
+    method: derived
+    formula: included_searches * 0.20
+    note: >-
+      SearchApi publishes the rule ("up to 20% of your plan's credits each hour") but not
+      the resulting number per tier. `hourly_searches` is that arithmetic, not a quoted
+      figure. The authoritative live value is `api_usage.hourly_rate_limit` from
+      GET /api/v1/me.
+refs:
+  rate_limits: rate-limits/searchapi-rate-limits.yml
+  account_api: https://www.searchapi.io/docs/account-api
+checked: '2026-08-13'
