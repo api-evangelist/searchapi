@@ -15,7 +15,7 @@ x-type: company
 x-source: engagement:searchapi
 x-tier: stub
 x-tier-reason: engagement
-specificationVersion: '0.21'
+specificationVersion: '0.23'
 created: '2026-07-23'
 modified: '2026-08-13'
 tags:
