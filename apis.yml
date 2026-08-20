@@ -19,6 +19,16 @@ specificationVersion: '0.23'
 created: '2026-07-23'
 modified: '2026-08-13'
 tags:
+  - Search
+  - SERP API
+  - Google Search
+  - Web Scraping
+  - Search data
+  - Market Intelligence
+  - SEO
+  - MCP
+  - agent-native
+tags_raw:
   - search
   - serp-api
   - google-search
@@ -122,6 +132,12 @@ apis:
     humanURL: https://www.searchapi.io/docs/google
     baseURL: https://www.searchapi.io/api/v1/search
     tags:
+      - Search
+      - SERP API
+      - Google Search
+      - Search data
+      - MCP
+    tags_raw:
       - search
       - serp-api
       - google-search
@@ -169,6 +185,12 @@ apis:
     humanURL: https://www.searchapi.io/docs/account-api
     baseURL: https://www.searchapi.io/api/v1
     tags:
+      - Account
+      - Usage
+      - Rate Limits
+      - Analytics
+      - Observability
+    tags_raw:
       - account
       - usage
       - rate-limits
