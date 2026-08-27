@@ -123,97 +123,106 @@ common:
   - type: OpenCollection
     url: collections/searchapi-search-api.opencollection.json
 apis:
-  - name: SearchApi SERP API
-    description: >-
-      REST API returning structured JSON search results across 100+ engines (Google, Bing, Maps, News,
-      Scholar, Images, Shopping, Trends, Jobs, YouTube, Amazon, Walmart, eBay). Single /api/v1/search
-      endpoint parameterized by engine, with server-side proxy rotation, CAPTCHA handling, and
-      location/locale targeting. Bearer API-key auth.
-    humanURL: https://www.searchapi.io/docs/google
-    baseURL: https://www.searchapi.io/api/v1/search
-    tags:
-      - Search
-      - SERP API
-      - Google Search
-      - Search data
-      - MCP
-    tags_raw:
-      - search
-      - serp-api
-      - google-search
-      - search-data
-      - mcp
-    properties:
-      - type: OpenAPI
-        name: SearchApi SERP API (generated from docs)
-        url: openapi/searchapi-search-api-openapi.yml
-      - type: Documentation
-        url: https://www.searchapi.io/docs/google
-      - type: Authentication
-        url: authentication/searchapi-authentication.yml
-      - type: MCPServer
-        url: mcp/searchapi-mcp.yml
-      - type: Overlay
-        url: overlays/searchapi-search-api-overlay.yaml
-      - type: ErrorCatalog
-        url: errors/searchapi-problem-types.yml
-      - type: RateLimits
-        url: rate-limits/searchapi-rate-limits.yml
-      - type: DataModel
-        url: data-model/searchapi-data-model.yml
-      - type: Conventions
-        url: conventions/searchapi-conventions.yml
-      - type: ToolCrosswalk
-        url: mcp/searchapi-tool-crosswalk.yml
-      - type: PostmanCollection
-        url: collections/searchapi-search-api.postman_collection.json
-      - type: OpenCollection
-        url: collections/searchapi-search-api.opencollection.json
-      - type: AgentSkill
-        name: Grounded web research
-        url: skills/searchapi-grounded-web-research.md
-  - name: SearchApi Account & Analytics API
-    description: >-
-      The two account-management endpoints SearchApi documents alongside its SERP surface.
-      GET /api/v1/me returns the calling key's monthly allowance, month-to-date usage,
-      remaining credits, searches made in the current hour and the hourly rate limit.
-      GET /api/v1/search_analytics returns aggregated success rate, error rate and latency
-      for the account's own searches, bucketed daily or hourly and optionally filtered to a
-      single engine. These are the only endpoints exposing runtime quota and reliability
-      signal — SearchApi returns no rate-limit response headers, so polling /api/v1/me is
-      the sole machine-readable view of remaining headroom.
-    humanURL: https://www.searchapi.io/docs/account-api
-    baseURL: https://www.searchapi.io/api/v1
-    tags:
-      - Account
-      - Usage
-      - Rate Limits
-      - Analytics
-      - Observability
-    tags_raw:
-      - account
-      - usage
-      - rate-limits
-      - analytics
-      - observability
-    properties:
-      - type: OpenAPI
-        name: SearchApi Account & Analytics API (generated from docs)
-        url: openapi/searchapi-account-api-openapi.yml
-      - type: Documentation
-        url: https://www.searchapi.io/docs/account-api
-      - type: APIReference
-        name: Search Analytics API
-        url: https://www.searchapi.io/docs/search-analytics-api
-      - type: Authentication
-        url: authentication/searchapi-authentication.yml
-      - type: RateLimits
-        url: rate-limits/searchapi-rate-limits.yml
-      - type: Plans
-        url: plans/searchapi-plans-pricing.yml
-      - type: AgentSkill
-        name: Quota-aware batch searching
-        url: skills/searchapi-quota-aware-batch.md
+- name: SearchApi SERP API
+  description: >-
+    REST API returning structured JSON search results across 100+ engines (Google, Bing, Maps, News, Scholar,
+    Images, Shopping, Trends, Jobs, YouTube, Amazon, Walmart, eBay). Single /api/v1/search endpoint parameterized
+    by engine, with server-side proxy rotation, CAPTCHA handling, and location/locale targeting. Bearer
+    API-key auth.
+  humanURL: https://www.searchapi.io/docs/google
+  baseURL: https://www.searchapi.io/api/v1/search
+  tags:
+  - Search
+  - SERP API
+  - Google Search
+  - Search data
+  - MCP
+  tags_raw:
+  - search
+  - serp-api
+  - google-search
+  - search-data
+  - mcp
+  properties:
+  - type: OpenAPI
+    name: SearchApi SERP API (generated from docs)
+    url: openapi/searchapi-search-api-openapi.yml
+  - type: Documentation
+    url: https://www.searchapi.io/docs/google
+  - type: Authentication
+    url: authentication/searchapi-authentication.yml
+  - type: MCPServer
+    url: mcp/searchapi-mcp.yml
+  - type: Overlay
+    url: overlays/searchapi-search-api-overlay.yaml
+  - type: ErrorCatalog
+    url: errors/searchapi-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/searchapi-rate-limits.yml
+  - type: DataModel
+    url: data-model/searchapi-data-model.yml
+  - type: Conventions
+    url: conventions/searchapi-conventions.yml
+  - type: ToolCrosswalk
+    url: mcp/searchapi-tool-crosswalk.yml
+  - type: PostmanCollection
+    url: collections/searchapi-search-api.postman_collection.json
+  - type: OpenCollection
+    url: collections/searchapi-search-api.opencollection.json
+  - type: AgentSkill
+    name: Grounded web research
+    url: skills/searchapi-grounded-web-research.md
+- name: SearchApi Account & Analytics API
+  description: >-
+    The two account-management endpoints SearchApi documents alongside its SERP surface. GET /api/v1/me
+    returns the calling key's monthly allowance, month-to-date usage, remaining credits, searches made
+    in the current hour and the hourly rate limit. GET /api/v1/search_analytics returns aggregated success
+    rate, error rate and latency for the account's own searches, bucketed daily or hourly and optionally
+    filtered to a single engine. These are the only endpoints exposing runtime quota and reliability signal
+    — SearchApi returns no rate-limit response headers, so polling /api/v1/me is the sole machine-readable
+    view of remaining headroom.
+  humanURL: https://www.searchapi.io/docs/account-api
+  baseURL: https://www.searchapi.io/api/v1
+  tags:
+  - Account
+  - Usage
+  - Rate Limits
+  - Analytics
+  - Observability
+  tags_raw:
+  - account
+  - usage
+  - rate-limits
+  - analytics
+  - observability
+  properties:
+  - type: OpenAPI
+    name: SearchApi Account & Analytics API (generated from docs)
+    url: openapi/searchapi-account-api-openapi.yml
+  - type: Documentation
+    url: https://www.searchapi.io/docs/account-api
+  - type: APIReference
+    name: Search Analytics API
+    url: https://www.searchapi.io/docs/search-analytics-api
+  - type: Authentication
+    url: authentication/searchapi-authentication.yml
+  - type: RateLimits
+    url: rate-limits/searchapi-rate-limits.yml
+  - type: Plans
+    url: plans/searchapi-plans-pricing.yml
+  - type: AgentSkill
+    name: Quota-aware batch searching
+    url: skills/searchapi-quota-aware-batch.md
+- aid: searchapi:searchapi-analytics-api
+  name: SearchApi Analytics API
+  description: Aggregated performance and error analytics for the account's own searches.
+  humanURL: https://www.searchapi.io/docs/google
+  baseURL: https://www.searchapi.io/api/v1/search
+  tags:
+  - analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/searchapi-analytics-api-openapi.yml
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
