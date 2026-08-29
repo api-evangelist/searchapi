@@ -9,6 +9,18 @@ description: >-
   plus "use-case bundles" that group selected endpoints around a job so agents can be handed a capability
   rather than a whole catalog. Used for SEO/rank tracking, market and price intelligence, RAG grounding,
   and agentic research workflows.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.searchapi.io/og-image.png
 url: https://raw.githubusercontent.com/api-evangelist/searchapi/refs/heads/main/apis.yml
 x-type: company
