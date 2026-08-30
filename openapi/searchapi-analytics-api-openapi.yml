@@ -1,0 +1,142 @@
+openapi: 3.2.0
+info:
+  title: SearchApi Account Analytics API
+  version: v1
+  description: 'The two account-management endpoints SearchApi documents alongside its SERP surface. `GET /api/v1/me` (the "Account API") returns the calling key''s plan usage, remaining credits, current-hour search count and hourly rate limit. `GET /api/v1/search_analytics` (the "Search Analytics API") returns aggregated success rates, error rates and latency for the account''s own searches, bucketed daily or hourly and optionally filtered to one engine.
+
+
+    These are the only SearchApi endpoints that expose runtime quota and reliability signal, and they are the reason an agent can self-regulate against SearchApi''s hourly cap: SearchApi returns NO `X-RateLimit-*` or `RateLimit-*` response headers, so `api_usage.hourly_rate_limit` and `api_usage.searches_this_hour` from this API are the only machine-readable view of remaining headroom.
+
+
+    This description is GENERATED from the public documentation — SearchApi publishes no machine-readable OpenAPI. Only documented parameters and documented response fields are modeled. The `search_analytics` response is modeled to the depth the docs describe (`search_parameters`, `summary`, `performance_by_engine`, `buckets`) without inventing field names inside those objects that the documentation does not spell out.'
+  x-provenance:
+    generated: '2026-08-13'
+    method: generated
+    source:
+    - https://www.searchapi.io/docs/account-api
+    - https://www.searchapi.io/docs/search-analytics-api
+    note: Faithful reconstruction from the two public docs pages. The 200 example for /api/v1/me is copied verbatim from the docs. The 401 example is copied from a live unauthenticated probe of https://www.searchapi.io/api/v1/me on 2026-08-13.
+  contact:
+    name: SearchApi Support
+    email: support@searchapi.io
+    url: https://www.searchapi.io/docs/account-api
+  termsOfService: https://www.searchapi.io/legal/terms
+servers:
+- url: https://www.searchapi.io
+  description: SearchApi production
+security:
+- bearerAuth: []
+- apiKeyQuery: []
+tags:
+- name: analytics
+  description: Aggregated performance and error analytics for the account's own searches.
+paths:
+  /api/v1/search_analytics:
+    get:
+      operationId: getSearchAnalytics
+      summary: Get aggregated search analytics for the account
+      description: 'Retrieves and explores the account''s search analytics: aggregate speed, total searches, success rate and errors, optionally broken down per engine and bucketed by day or hour over a chosen time period.'
+      tags:
+      - analytics
+      parameters:
+      - name: engine
+        in: query
+        required: false
+        description: Filter to one engine by name, or `all` for every engine.
+        schema:
+          type: string
+      - name: bucket
+        in: query
+        required: false
+        description: Aggregation interval.
+        schema:
+          type: string
+          enum:
+          - daily
+          - hourly
+      - name: time_period
+        in: query
+        required: false
+        description: Preset reporting window.
+        schema:
+          type: string
+          enum:
+          - last_day
+          - last_week
+          - last_month
+          - last_6_months
+          - last_year
+      - name: time_period_min
+        in: query
+        required: false
+        description: Start date or datetime of the window. Defaults to one month ago.
+        schema:
+          type: string
+      - name: time_period_max
+        in: query
+        required: false
+        description: End date or datetime of the window. Defaults to today.
+        schema:
+          type: string
+      - name: api_key
+        in: query
+        required: false
+        description: 'API key, if not supplied as an `Authorization: Bearer` header.'
+        schema:
+          type: string
+      - name: zero_retention
+        in: query
+        required: false
+        description: Enterprise-only. Disable logging and storage of the request.
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Analytics for the requested window.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchAnalyticsResponse'
+        '401':
+          description: Missing or invalid API key.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    SearchAnalyticsResponse:
+      type: object
+      properties:
+        search_parameters:
+          type: object
+          description: Echo of the request parameters used to build the report.
+        summary:
+          type: object
+          description: Aggregate metrics across the window — average speed, total searches, success rate and errors.
+        performance_by_engine:
+          type: array
+          description: Per-engine breakdown. Omitted when the request filtered to a single engine.
+          items:
+            type: object
+        buckets:
+          type: array
+          description: Time-interval analytics, each carrying the interval start and end datetimes, speeds, search counts and error rates.
+          items:
+            type: object
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message. SearchApi does not use RFC 9457 problem+json.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key sent as `Authorization: Bearer <API_KEY>`.'
+    apiKeyQuery:
+      type: apiKey
+      in: query
+      name: api_key
+      description: API key sent as the `api_key` query-string parameter.
