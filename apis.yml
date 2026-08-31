@@ -32,10 +32,10 @@ created: '2026-07-23'
 modified: '2026-08-13'
 tags:
   - Search
-  - SERP API
-  - Google Search
+  - serp-api
+  - google-search
   - Web Scraping
-  - Search data
+  - search-data
   - Market Intelligence
   - SEO
   - MCP
@@ -145,9 +145,9 @@ apis:
   baseURL: https://www.searchapi.io/api/v1/search
   tags:
   - Search
-  - SERP API
-  - Google Search
-  - Search data
+  - serp-api
+  - google-search
+  - search-data
   - MCP
   tags_raw:
   - search
@@ -198,9 +198,9 @@ apis:
   tags:
   - Account
   - Usage
-  - Rate Limits
+  - rate-limits
   - Analytics
-  - Observability
+  - observability
   tags_raw:
   - account
   - usage
@@ -231,6 +231,8 @@ apis:
   humanURL: https://www.searchapi.io/docs/google
   baseURL: https://www.searchapi.io/api/v1/search
   tags:
+  - Analytics
+  tags_raw:
   - analytics
   properties:
   - type: OpenAPI
