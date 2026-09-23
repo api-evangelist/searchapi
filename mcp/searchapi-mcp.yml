@@ -3,29 +3,18 @@ method: searched
 status: published
 source: https://www.searchapi.io/integrations/mcp
 sources:
-  - https://www.searchapi.io/integrations/mcp
-  - https://github.com/SearchApi/searchapi-mcp/blob/main/server.json
-  - https://registry.modelcontextprotocol.io/v0/servers?search=searchapi
-  - https://www.searchapi.io/.well-known/oauth-protected-resource
-  - https://www.searchapi.io/.well-known/oauth-authorization-server
+- https://www.searchapi.io/integrations/mcp
+- https://github.com/SearchApi/searchapi-mcp/blob/main/server.json
+- https://registry.modelcontextprotocol.io/v0/servers?search=searchapi
+- https://www.searchapi.io/.well-known/oauth-protected-resource
+- https://www.searchapi.io/.well-known/oauth-authorization-server
 deployment:
   mode: remote
   endpoint: https://www.searchapi.io/mcp
-  auth: oauth
   verified: probed
   probe: gated
-  checked: '2026-08-13'
-  note: >-
-    Remote only. There is no npx/uvx stdio package: the first-party GitHub repo
-    SearchApi/searchapi-mcp ships no runnable server, only a README and an MCP
-    registry `server.json` that points back at the hosted streamable-HTTP endpoint.
-    An unauthenticated POST of tools/list to https://www.searchapi.io/mcp returns
-    HTTP 401 with
-    `WWW-Authenticate: Bearer resource_metadata=".../.well-known/oauth-protected-resource/mcp", scope="mcp"`
-    and body `{"error":"invalid_request","error_description":"Authentication required.
-    Provide an OAuth Bearer token or a static MCP token in the X-MCP-Token header."}`
-    — so the live tool schemas are auth-gated and the tool list below is enumerated
-    from the published MCP integrations catalog, NOT from authenticated introspection.
+  checked: '2026-08-12'
+  source: catalog MCP census
 registry:
   listed: true
   registry: https://registry.modelcontextprotocol.io
@@ -47,28 +36,28 @@ server:
       scope: mcp
       protected_resource_metadata: https://www.searchapi.io/.well-known/oauth-protected-resource
       authorization_server_metadata: https://www.searchapi.io/.well-known/oauth-authorization-server
-      grant_types: [authorization_code, refresh_token]
+      grant_types:
+      - authorization_code
+      - refresh_token
       pkce: S256
       dynamic_client_registration: https://www.searchapi.io/oauth/register
-      bearer_methods_supported: [header]
+      bearer_methods_supported:
+      - header
       ref: scopes/searchapi-scopes.yml
-      note: >-
-        Documented as the recommended path: "Compatible clients handle sign-in
-        automatically on first connection, with tokens expiring and rotating
-        automatically."
+      note: 'Documented as the recommended path: "Compatible clients handle sign-in automatically on first
+        connection, with tokens expiring and rotating automatically."'
     static_token:
       supported: true
       header: X-MCP-Token
       query_param: token
       issued_at: https://www.searchapi.io/mcp_integrations
-      note: >-
-        Retained for programmatic clients. SearchApi's own docs warn against the query
-        form: "Do not put credentials in an MCP URL; URLs can be retained in browser
-        history and intermediary logs." The registry `server.json` remote entry still
-        templates the token into the URL as `?token={api_token}`.
+      note: 'Retained for programmatic clients. SearchApi''s own docs warn against the query form: "Do
+        not put credentials in an MCP URL; URLs can be retained in browser history and intermediary logs."
+        The registry `server.json` remote entry still templates the token into the URL as `?token={api_token}`.'
   clients:
     claude_code: claude mcp add --transport http searchapi https://www.searchapi.io/mcp
-    claude_desktop: Customize -> Connectors -> add https://www.searchapi.io/mcp (OAuth prompt appears automatically)
+    claude_desktop: Customize -> Connectors -> add https://www.searchapi.io/mcp (OAuth prompt appears
+      automatically)
     cursor:
       file: ~/.cursor/mcp.json
       config: '{"mcpServers": {"searchapi": {"url": "https://www.searchapi.io/mcp"}}}'
@@ -80,77 +69,73 @@ limits:
   billing: Each tool call counts as one search request against the plan quota.
   ref: rate-limits/searchapi-rate-limits.yml
 bundles:
-  note: >-
-    Tools are grouped into configurable "bundles" — a bundle is the set of tools you
-    attach to an assistant, assembled in the dashboard at
-    https://www.searchapi.io/mcp_integrations. This is SearchApi's substitute for
-    per-tool OAuth scoping: the single `mcp` scope carries whatever the bundle holds.
+  note: 'Tools are grouped into configurable "bundles" — a bundle is the set of tools you attach to an
+    assistant, assembled in the dashboard at https://www.searchapi.io/mcp_integrations. This is SearchApi''s
+    substitute for per-tool OAuth scoping: the single `mcp` scope carries whatever the bundle holds.'
   examples:
-    - Google Travel
-tools_note: >-
-  The MCP integrations page advertises "80+ tools". The list below is the subset whose
-  names are published on that page and which map to a documented engine; it is not the
-  full 80+, because the complete inventory with input schemas is only visible after
-  authenticating. Categories the page names but that are not individually enumerated
-  here include Instagram, TikTok, Facebook, LinkedIn ads, Zillow, Tripadvisor,
-  ChatGPT/Gemini/Perplexity answer engines, and Apple App Store.
+  - Google Travel
+tools_note: The MCP integrations page advertises "80+ tools". The list below is the subset whose names
+  are published on that page and which map to a documented engine; it is not the full 80+, because the
+  complete inventory with input schemas is only visible after authenticating. Categories the page names
+  but that are not individually enumerated here include Instagram, TikTok, Facebook, LinkedIn ads, Zillow,
+  Tripadvisor, ChatGPT/Gemini/Perplexity answer engines, and Apple App Store.
 tools:
-  - name: google_search
-    description: Structured Google Search (organic, ads, knowledge graph, etc.)
-    source_engine: google
-  - name: google_maps
-    description: Google Maps local results and place data
-    source_engine: google_maps
-  - name: google_news
-    description: Google News results
-    source_engine: google_news
-  - name: google_scholar
-    description: Google Scholar academic results (incl. case law)
-    source_engine: google_scholar
-  - name: google_shopping
-    description: Google Shopping product results
-    source_engine: google_shopping
-  - name: google_flights
-    description: Google Flights round-trip / one-way search
-    source_engine: google_flights
-  - name: google_hotels
-    description: Google Hotels search
-    source_engine: google_hotels
-  - name: google_jobs
-    description: Google Jobs listings
-    source_engine: google_jobs
-  - name: google_trends
-    description: Google Trends interest-over-time and related queries
-    source_engine: google_trends
-  - name: google_images
-    description: Google Images results
-    source_engine: google_images
-  - name: google_patents
-    description: Google Patents search
-    source_engine: google_patents
-  - name: youtube_search
-    description: YouTube search results
-    source_engine: youtube
-  - name: bing_search
-    description: Bing web search results
-    source_engine: bing
-  - name: amazon_search
-    description: Amazon product search and product detail
-    source_engine: amazon
-  - name: walmart_search
-    description: Walmart product search, store discovery, and reviews
-    source_engine: walmart
-  - name: ebay_search
-    description: eBay marketplace search
-    source_engine: ebay
-  - name: bestbuy_search
-    description: BestBuy product search and product detail
-    source_engine: bestbuy
-  - name: apple_maps
-    description: Apple Maps search, place, and guide lookups
-    source_engine: apple_maps
-  - name: airbnb_search
-    description: Airbnb property, experience, review and availability lookups
-    source_engine: airbnb
+- name: google_search
+  description: Structured Google Search (organic, ads, knowledge graph, etc.)
+  source_engine: google
+- name: google_maps
+  description: Google Maps local results and place data
+  source_engine: google_maps
+- name: google_news
+  description: Google News results
+  source_engine: google_news
+- name: google_scholar
+  description: Google Scholar academic results (incl. case law)
+  source_engine: google_scholar
+- name: google_shopping
+  description: Google Shopping product results
+  source_engine: google_shopping
+- name: google_flights
+  description: Google Flights round-trip / one-way search
+  source_engine: google_flights
+- name: google_hotels
+  description: Google Hotels search
+  source_engine: google_hotels
+- name: google_jobs
+  description: Google Jobs listings
+  source_engine: google_jobs
+- name: google_trends
+  description: Google Trends interest-over-time and related queries
+  source_engine: google_trends
+- name: google_images
+  description: Google Images results
+  source_engine: google_images
+- name: google_patents
+  description: Google Patents search
+  source_engine: google_patents
+- name: youtube_search
+  description: YouTube search results
+  source_engine: youtube
+- name: bing_search
+  description: Bing web search results
+  source_engine: bing
+- name: amazon_search
+  description: Amazon product search and product detail
+  source_engine: amazon
+- name: walmart_search
+  description: Walmart product search, store discovery, and reviews
+  source_engine: walmart
+- name: ebay_search
+  description: eBay marketplace search
+  source_engine: ebay
+- name: bestbuy_search
+  description: BestBuy product search and product detail
+  source_engine: bestbuy
+- name: apple_maps
+  description: Apple Maps search, place, and guide lookups
+  source_engine: apple_maps
+- name: airbnb_search
+  description: Airbnb property, experience, review and availability lookups
+  source_engine: airbnb
 crosswalk: mcp/searchapi-tool-crosswalk.yml
 checked: '2026-08-13'

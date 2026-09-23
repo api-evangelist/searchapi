@@ -1,0 +1,36 @@
+# Front Door AI Index — searchapi — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: searchapi
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.searchapi.io
+  final_host: www.searchapi.io
+  ownership: own
+  owner: searchapi
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 177
+  host_score: 177
+  density: 67.43
+  words: 2625
+  tiers:
+    agentic: 8
+    core: 24
+    model: 145
+  ambiguous: 2
+  top_terms:
+    ChatGPT: 94
+    OpenAI: 32
+    AI: 18
+    GPT: 16
+    chatbot: 4
+    Gemini: 3
+    copilot: 3
+    large language model: 3
+    artificial intelligence: 2
+    intelligence: 2
+    LLMs: 1
+    prompts: 1
