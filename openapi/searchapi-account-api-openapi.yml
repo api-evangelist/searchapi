@@ -73,6 +73,12 @@ paths:
                 error: Invalid API key.
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message. SearchApi does not use RFC 9457 problem+json.
     AccountResponse:
       type: object
       properties:
@@ -108,12 +114,6 @@ components:
               type: string
               format: date-time
               description: Current subscription period end.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Human-readable error message. SearchApi does not use RFC 9457 problem+json.
   securitySchemes:
     bearerAuth:
       type: http

@@ -231,6 +231,49 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
+      additionalProperties: true
+    OrganicResult:
+      type: object
+      properties:
+        position:
+          type: integer
+          description: Result rank on the page.
+        title:
+          type: string
+        link:
+          type: string
+          format: uri
+        source:
+          type: string
+          description: Website name / brand.
+        domain:
+          type: string
+        displayed_link:
+          type: string
+        snippet:
+          type: string
+        snippet_highlighted_words:
+          type: array
+          items:
+            type: string
+        date:
+          type: string
+        thumbnail:
+          type: string
+          description: Thumbnail image (may be a URL or base64 data).
+        favicon:
+          type: string
+        sitelinks:
+          type: object
+          description: Sub-page links with titles/URLs.
+          additionalProperties: true
+      additionalProperties: true
     SearchMetadata:
       type: object
       properties:
@@ -262,19 +305,6 @@ components:
         json_url:
           type: string
           description: SearchApi-hosted JSON results page.
-      additionalProperties: true
-    Pagination:
-      type: object
-      properties:
-        current:
-          type: integer
-        next:
-          type: string
-          format: uri
-        other_pages:
-          type: object
-          additionalProperties:
-            type: string
       additionalProperties: true
     SearchResponse:
       type: object
@@ -314,52 +344,22 @@ components:
         pagination:
           $ref: '#/components/schemas/Pagination'
       additionalProperties: true
-    OrganicResult:
-      type: object
-      properties:
-        position:
-          type: integer
-          description: Result rank on the page.
-        title:
-          type: string
-        link:
-          type: string
-          format: uri
-        source:
-          type: string
-          description: Website name / brand.
-        domain:
-          type: string
-        displayed_link:
-          type: string
-        snippet:
-          type: string
-        snippet_highlighted_words:
-          type: array
-          items:
-            type: string
-        date:
-          type: string
-        thumbnail:
-          type: string
-          description: Thumbnail image (may be a URL or base64 data).
-        favicon:
-          type: string
-        sitelinks:
-          type: object
-          description: Sub-page links with titles/URLs.
-          additionalProperties: true
-      additionalProperties: true
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Human-readable error message.
-      additionalProperties: true
     SearchInformation:
       type: object
       description: Query-level statistics (fields vary by engine).
+      additionalProperties: true
+    Pagination:
+      type: object
+      properties:
+        current:
+          type: integer
+        next:
+          type: string
+          format: uri
+        other_pages:
+          type: object
+          additionalProperties:
+            type: string
       additionalProperties: true
   securitySchemes:
     bearerAuth:

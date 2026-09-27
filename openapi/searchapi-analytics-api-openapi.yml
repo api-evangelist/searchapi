@@ -99,6 +99,12 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message. SearchApi does not use RFC 9457 problem+json.
     SearchAnalyticsResponse:
       type: object
       properties:
@@ -118,12 +124,6 @@ components:
           description: Time-interval analytics, each carrying the interval start and end datetimes, speeds, search counts and error rates.
           items:
             type: object
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Human-readable error message. SearchApi does not use RFC 9457 problem+json.
   securitySchemes:
     bearerAuth:
       type: http
