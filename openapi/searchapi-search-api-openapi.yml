@@ -231,80 +231,18 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
+    Pagination:
       type: object
       properties:
-        error:
-          type: string
-          description: Human-readable error message.
-      additionalProperties: true
-    OrganicResult:
-      type: object
-      properties:
-        position:
+        current:
           type: integer
-          description: Result rank on the page.
-        title:
-          type: string
-        link:
+        next:
           type: string
           format: uri
-        source:
-          type: string
-          description: Website name / brand.
-        domain:
-          type: string
-        displayed_link:
-          type: string
-        snippet:
-          type: string
-        snippet_highlighted_words:
-          type: array
-          items:
-            type: string
-        date:
-          type: string
-        thumbnail:
-          type: string
-          description: Thumbnail image (may be a URL or base64 data).
-        favicon:
-          type: string
-        sitelinks:
+        other_pages:
           type: object
-          description: Sub-page links with titles/URLs.
-          additionalProperties: true
-      additionalProperties: true
-    SearchMetadata:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique search identifier.
-        status:
-          type: string
-          description: Request status, e.g. "Success".
-        created_at:
-          type: string
-          format: date-time
-          description: ISO 8601 creation timestamp.
-        request_time_taken:
-          type: number
-          description: Seconds spent on the upstream HTTP request.
-        parsing_time_taken:
-          type: number
-          description: Seconds spent parsing the response.
-        total_time_taken:
-          type: number
-          description: Total processing time in seconds.
-        request_url:
-          type: string
-          description: The upstream search URL that was constructed.
-        html_url:
-          type: string
-          description: SearchApi-hosted HTML results page.
-        json_url:
-          type: string
-          description: SearchApi-hosted JSON results page.
+          additionalProperties:
+            type: string
       additionalProperties: true
     SearchResponse:
       type: object
@@ -344,22 +282,84 @@ components:
         pagination:
           $ref: '#/components/schemas/Pagination'
       additionalProperties: true
+    SearchMetadata:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique search identifier.
+        status:
+          type: string
+          description: Request status, e.g. "Success".
+        created_at:
+          type: string
+          format: date-time
+          description: ISO 8601 creation timestamp.
+        request_time_taken:
+          type: number
+          description: Seconds spent on the upstream HTTP request.
+        parsing_time_taken:
+          type: number
+          description: Seconds spent parsing the response.
+        total_time_taken:
+          type: number
+          description: Total processing time in seconds.
+        request_url:
+          type: string
+          description: The upstream search URL that was constructed.
+        html_url:
+          type: string
+          description: SearchApi-hosted HTML results page.
+        json_url:
+          type: string
+          description: SearchApi-hosted JSON results page.
+      additionalProperties: true
     SearchInformation:
       type: object
       description: Query-level statistics (fields vary by engine).
       additionalProperties: true
-    Pagination:
+    OrganicResult:
       type: object
       properties:
-        current:
+        position:
           type: integer
-        next:
+          description: Result rank on the page.
+        title:
+          type: string
+        link:
           type: string
           format: uri
-        other_pages:
-          type: object
-          additionalProperties:
+        source:
+          type: string
+          description: Website name / brand.
+        domain:
+          type: string
+        displayed_link:
+          type: string
+        snippet:
+          type: string
+        snippet_highlighted_words:
+          type: array
+          items:
             type: string
+        date:
+          type: string
+        thumbnail:
+          type: string
+          description: Thumbnail image (may be a URL or base64 data).
+        favicon:
+          type: string
+        sitelinks:
+          type: object
+          description: Sub-page links with titles/URLs.
+          additionalProperties: true
+      additionalProperties: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
       additionalProperties: true
   securitySchemes:
     bearerAuth:
