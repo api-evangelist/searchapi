@@ -45,7 +45,7 @@ x-tier: stub
 x-tier-reason: engagement
 specificationVersion: '0.23'
 created: '2026-07-23'
-modified: '2026-08-13'
+modified: '2026-10-06'
 tags:
   - Search
   - SERP API
@@ -67,6 +67,8 @@ tags_raw:
   - mcp
   - agent-native
 common:
+  - url: https://www.searchapi.io/press
+    type: Blog
   - type: Website
     url: https://www.searchapi.io/
   - type: DeveloperPortal
