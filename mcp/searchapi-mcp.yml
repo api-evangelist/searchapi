@@ -139,3 +139,18 @@ tools:
   source_engine: airbnb
 crosswalk: mcp/searchapi-tool-crosswalk.yml
 checked: '2026-08-13'
+rfc9728:
+  endpoint: https://www.searchapi.io/mcp
+  metadata_url: https://www.searchapi.io/.well-known/oauth-protected-resource/mcp
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://www.searchapi.io/mcp
+    authorization_servers:
+    - https://www.searchapi.io
+    scopes_supported:
+    - mcp
+    bearer_methods_supported:
+    - header
