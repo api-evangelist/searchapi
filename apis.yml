@@ -48,7 +48,7 @@ created: '2026-07-23'
 modified: '2026-10-06'
 tags:
   - Search
-  - SERP API
+  - SERP
   - Google Search
   - Web Scraping
   - Search data
@@ -163,7 +163,7 @@ apis:
   baseURL: https://www.searchapi.io/api/v1/search
   tags:
   - Search
-  - SERP API
+  - SERP
   - Google Search
   - Search data
   - MCP
