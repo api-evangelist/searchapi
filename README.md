@@ -64,9 +64,137 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-SearchApi is a real-time SERP and search-data API providing structured JSON access to 100+ search engines
-(Google, Bing, Maps, News, Scholar, Images, Shopping, Trends, Jobs, YouTube, Amazon, Walmart, eBay), with
-server-side proxy rotation and CAPTCHA handling, an MCP server, and use-case bundles for AI agents.
+SearchApi is a real-time SERP and search-data API that gives applications and AI agents structured access to results from 100+ search engines — Google Search, Google Maps, Google News, Google Scholar, Google Images, Google Shopping, Google Trends, Google Jobs, YouTube, Bing, Baidu, and marketplace engines like Amazon, Walmart, and eBay — returning clean JSON instead of scraped HTML. It handles proxy rotation, CAPTCHA solving, and geographic/locale targeting server-side, and ships an MCP server plus "use-case bundles" that group selected endpoints around a job so agents can be handed a capability rather than a whole catalog. Used for SEO/rank tracking, market and price intelligence, RAG grounding, and agentic research workflows.
 
-- https://www.searchapi.io/
-- https://www.searchapi.io/docs
+**Areas:** Search · SERP · Google Search · Web Scraping · Search data · Market Intelligence · SEO · MCP · Agent-Native
+
+## SearchApi on APIs.io
+
+Everything profiled for SearchApi is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/searchapi/](https://apis.io/providers/searchapi/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [SearchApi SERP API](https://apis.io/apis/searchapi/searchapi-serp-api/) — REST API returning structured JSON search results across 100+ engines (Google, Bing, Maps, News, Scholar, Images, Shopping, Trends, Jobs, YouTube, Amazon,…
+- [SearchApi Account & Analytics API](https://apis.io/apis/searchapi/searchapi-account-analytics-api/) — The two account-management endpoints SearchApi documents alongside its SERP surface. GET /api/v1/me returns the calling key's monthly allowance,…
+- [SearchApi Analytics API](https://apis.io/apis/searchapi/searchapi-analytics-api/) — Aggregated performance and error analytics for the account's own searches.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [searchapi](https://apis.io/servers/searchapi/searchapi/)
+
+#### Collections (2)
+
+Postman and Open Collection request collections.
+
+- [SearchApi Account & Analytics API](https://apis.io/collections/searchapi/open-searchapi-account-api/)
+- [SearchApi SERP API](https://apis.io/collections/searchapi/open-searchapi-search-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Searchapi Search Api Overlay](https://apis.io/overlays/searchapi/searchapi-search-api-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Searchapi Authentication](https://apis.io/security/searchapi/searchapi-authentication/)
+- [Searchapi Domain Security](https://apis.io/security/searchapi/searchapi-domain-security/)
+- [Searchapi Trust Center](https://apis.io/security/searchapi/searchapi-trust-center/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Searchapi Scopes](https://apis.io/scopes/searchapi/searchapi-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Searchapi Plans Pricing](https://apis.io/plans/searchapi/searchapi-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Searchapi Rate Limits](https://apis.io/rate-limits/searchapi/searchapi-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.searchapi.io/)
+- [Documentation](https://www.searchapi.io/docs/google)
+- [API reference](https://www.searchapi.io/docs/google)
+- [Pricing](https://www.searchapi.io/pricing)
+- [Sign up](https://www.searchapi.io/users/sign_up)
+- [Changelog](https://www.searchapi.io/announcements)
+- [Blog](https://www.searchapi.io/press)
+- [Compliance](https://www.searchapi.io/legal/dpa)
+- [Terms of service](https://www.searchapi.io/legal/terms)
+- [Privacy policy](https://www.searchapi.io/legal/privacy)
+- [GitHub](https://github.com/SearchApi)
+- [Status](https://status.searchapi.io/)
+
+## API Evangelist rating
+
+**Kin Score 54.6** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 80.0 |
+| Contract quality | 13.9 |
+| Contract governance | 18.2 |
+| Operational transparency | 65.8 |
+| Developer ergonomics | 51.8 |
+| Access clarity | 92.1 |
+
+**Agent readiness 60.2** — agent-native
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | na |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | na |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 39.2** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/searchapi/](https://apis.io/providers/searchapi/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for SearchApi: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/searchapi/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
